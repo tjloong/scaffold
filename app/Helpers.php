@@ -3,6 +3,18 @@
 use Carbon\Carbon;
 
 /**
+ * Get app version
+ */
+function get_app_version()
+{
+	$files = collect(scandir(base_path('.git/refs/tags')))->filter(function($file) {
+		return !in_array($file, ['.', '..']);
+	});
+
+	return $files->last() ?? '1.0.0';
+}
+
+/**
  * Get url mime type
  */
 function get_url_mime_type($url)

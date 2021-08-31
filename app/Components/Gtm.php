@@ -30,7 +30,7 @@ class Gtm extends Component
     {
         $route = request()->route()->getName() ?? request()->path();
 
-        if (!$this->config->id || $this->isRouteExcluded($route)) return;
+        if (!$this->config->id || env('APP_ENV') !== 'production' || $this->isRouteExcluded($route)) return;
 
         return view('scaffold-component::gtm');
     }
