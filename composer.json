@@ -1,0 +1,25 @@
+{
+    "name": "jiannius/scaffold",
+    "description": "Scaffolding for Laravel application",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Jiannius\\Scaffold\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "TJ",
+            "email": "tj@jiannius.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jiannius\\Scaffold\\ScaffoldServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
