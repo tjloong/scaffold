@@ -2,6 +2,7 @@
 
 namespace Jiannius\Scaffold\Traits;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -113,7 +114,7 @@ trait AuthManager
      */
     public function resendEmailVerification()
     {
-        if ($user instanceof MustVerifyEmail && !request()->user()->hasVerifiedEmail()) {
+        if (request()->user() instanceof MustVerifyEmail && !request()->user()->hasVerifiedEmail()) {
             request()->user()->sendEmailVerificationNotification();
             return $this->verificationLinkSent(request()->user());
         }
@@ -126,7 +127,7 @@ trait AuthManager
     */
     public function verifyEmail()
     {
-        if ($user instanceof MustVerifyEmail && !request()->user()->hasVerifiedEmail()) {
+        if (request()->user() instanceof MustVerifyEmail && !request()->user()->hasVerifiedEmail()) {
             request()->user()->markEmailAsVerified();
             return $this->emailVerified(request()->user());
         }

@@ -5,6 +5,7 @@ namespace Jiannius\Scaffold;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Jiannius\Scaffold\Commands\InstallCommand;
 
 class ScaffoldServiceProvider extends ServiceProvider
 {
@@ -50,8 +51,12 @@ class ScaffoldServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/scaffold.php' => config_path('scaffold.php'),
-                __DIR__.'/../stubs/Core/Controller.php' => app_path('Http/Controllers/Controller.php'),
+                __DIR__.'/../resources/views/errors' => resource_path('views/errors'),
             ], 'scaffold-core');
+
+            $this->commands([
+                InstallCommand::class,
+            ]);
         }
     }
 

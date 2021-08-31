@@ -35,29 +35,12 @@
 
 					<div class="field-input">
 						<label class="required">Login Password</label>
-						<div class="relative">
-							<input type="password" id="password" class="form-input w-full pr-10" name="password" required>
-							<a 
-								class="absolute top-0 right-0 bottom-0 flex items-center justify-center text-xs font-medium pr-2"
-								onclick="
-									const pwd = document.querySelector('#password');
-									if (pwd.getAttribute('type') === 'password') {
-										pwd.setAttribute('type', 'text');
-										event.target.innerHTML = 'hide'
-									}
-									else {
-										pwd.setAttribute('type', 'password')
-										event.target.innerHTML = 'show'
-									}
-								"
-							>
-								show
-							</a>
-						</div>
+						<x-scaffold-component::password-input name="password" required/>
 					</div>
 
-					<div class="my-6">
-						<checkbox name="agree_tnc" class="mb-3">
+	
+					<div class="mt-6 mb-3">
+						<x-scaffold-component::checkbox name="agree_tnc" color="teal">
 							<div class="text-gray-500">
 								By signing up, I have read and agreed to the app's
 								<a href="/terms" target="_blank" class="text-blue-500 font-medium">
@@ -67,13 +50,15 @@
 									privacy policy
 								</a>.
 							</div>
-						</checkbox>
+						</x-scaffold-component::checkbox>
+					</div>
 
-						<checkbox name="agree_marketing" :value="true">
+					<div class="mb-6">
+						<x-scaffold-component::checkbox name="agree_marketing" color="teal" checked>
 							<div class="text-gray-500">
 								I agree to be part of the app's database for future newsletter, marketing and promotions opportunities.
 							</div>
-						</checkbox>
+						</x-scaffold-component::checkbox>
 					</div>
 
 					@if ($errors->any())

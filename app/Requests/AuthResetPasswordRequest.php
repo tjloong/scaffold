@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Requests;
+namespace Jiannius\Scaffold\Requests;
 
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;

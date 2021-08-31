@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Validation\Rule;
 use App\Providers\RouteServiceProvider;
 use Jiannius\Scaffold\Traits\AuthManager;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -61,7 +62,7 @@ class AuthController extends Controller
      */
     public function registered($user)
     {
-        return $this->request->wantsJson()
+        return request()->wantsJson()
             ? $user
             : redirect(RouteServiceProvider::HOME);
     }
@@ -73,7 +74,7 @@ class AuthController extends Controller
      */
     public function loggedOut()
     {
-        return $this->request->wantsJson()
+        return request()->wantsJson()
             ? response()->json(true)
             : redirect('/');
     }
@@ -85,9 +86,9 @@ class AuthController extends Controller
      */
     public function verificationLinkSent($user)
     {
-        return $this->request->wantsJson()
+        return request()->wantsJson()
             ? response()->json(true)
-            : back()->with('status', 'successful');
+            : back()->with('notification', 'verification-link-sent');
     }
 
     /**
@@ -97,8 +98,8 @@ class AuthController extends Controller
      */
     public function emailVerified($user)
     {
-        return $this->request->wantsJson()
+        return request()->wantsJson()
             ? response()->json(true)
-            : redirect(RouteServiceProvider::HOME);
+            : redirect(RouteServiceProvider::HOME)->with('notification', 'email-verified');
     }
 }

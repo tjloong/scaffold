@@ -9,6 +9,7 @@ return [
          * App logo
          */
         'logo' => 'logo.svg',
+        'logo_error' => 'logo-e.svg',
         'favicon' => 'logo.svg',
         'blob_bg' => 'blob-bg.svg',
 

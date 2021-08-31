@@ -9,7 +9,7 @@
     
     <link rel="shortcut icon" href="/storage/img/{{ config('scaffold.view.logo') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="{{ mix('/css/main.css') }}">
     
     <x-scaffold-component::gtm/>
 </head>
@@ -21,6 +21,6 @@
     </div>
 
     <script src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js"></script>
-    <script src="/js/auth.js" defer></script>
+    <script src="{{ mix('/js/auth.js') }}" defer></script>
 </body>
 </html>

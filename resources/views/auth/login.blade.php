@@ -53,7 +53,7 @@
                 <div class="mt-6 text-sm">
                     Don't have an account? 
 
-                    <a href="{{ route('register') }}" class="text-blue-500 font-medium">
+                    <a href="{{ route('register', ['ref' => 'login']) }}" class="text-blue-500 font-medium">
                         Sign Up
                     </a>
                 </div>
