@@ -47,11 +47,15 @@ class ScaffoldServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views/components', 'scaffold-component');
         Blade::componentNamespace('Jiannius\\Scaffold\\Components', 'scaffold-component');
 
+        // Helpers
+        require_once __DIR__.'/../app/Helpers.php';
+
         // publishing
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/scaffold.php' => config_path('scaffold.php'),
                 __DIR__.'/../resources/views/errors' => resource_path('views/errors'),
+                __DIR__.'/../stubs/Env' => base_path(),
             ], 'scaffold-core');
 
             $this->commands([
@@ -72,6 +76,10 @@ class ScaffoldServiceProvider extends ServiceProvider
         });
 
         $this->loadViewsFrom(__DIR__.'/../resources/views/auth', 'scaffold-auth');
+
+        // add laravel sanctum middleware to kernel
+        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
+            ->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
 
         // publishing
         if ($this->app->runningInConsole()) {

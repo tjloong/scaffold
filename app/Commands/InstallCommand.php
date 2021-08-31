@@ -45,6 +45,13 @@ class InstallCommand extends Command
 
             $this->call('vendor:publish', $args);
 
+            // for auth module, publish laravel sanctum
+            if ($module === 'auth') {
+                $this->call('vendor:publish', [
+                    '--provider' => 'Laravel\Sanctum\SanctumServiceProvider',
+                ]);
+            }
+
             $this->newLine(2);
         }
     }
