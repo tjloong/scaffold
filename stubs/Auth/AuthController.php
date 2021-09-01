@@ -70,9 +70,10 @@ class AuthController extends Controller
     /**
      * Custom action after user is logged out
      * 
+     * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function loggedOut()
+    public function loggedOut($user)
     {
         return request()->wantsJson()
             ? response()->json(true)

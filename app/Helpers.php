@@ -194,6 +194,8 @@ function date_range($str, $strict = false)
 	return (object)[
 		'from' => $from->copy()->toDateString(),
 		'to' => $to->copy()->toDateString(),
+		'from_dt' => $from->copy()->toDatetimeString(),
+		'to_dt' => $to->copy()->toDatetimeString(),
 		'diffInDays' => $from->copy()->diffInDays($to),
 		'diffInMonths' => $from->copy()->diffInMonths($to->copy()->endOfMonth()),
 		'diffInYears' => $from->copy()->diffInYears($to->copy()->endOfYear()),
