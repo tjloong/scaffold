@@ -45,7 +45,14 @@ class InstallCommand extends Command
 
             $this->call('vendor:publish', $args);
 
-            // for auth module, publish laravel sanctum
+            // publishing for dependencies
+            if ($module === 'core') {
+                $this->call('vendor:publish', [
+                    '--provider' => 'Torann\GeoIP\GeoIPServiceProvider',
+                    '--tag' => 'config',
+                ]);
+            }
+
             if ($module === 'auth') {
                 $this->call('vendor:publish', [
                     '--provider' => 'Laravel\Sanctum\SanctumServiceProvider',
