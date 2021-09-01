@@ -4,7 +4,7 @@ namespace Jiannius\Scaffold\Components;
 
 use Illuminate\View\Component;
 
-class Gtm extends Component
+class Ga extends Component
 {
     public $config;
     public $noscript;
@@ -17,8 +17,8 @@ class Gtm extends Component
      */
     public function __construct($noscript = false)
     {
+        $this->config = (object)config('scaffold.web.ga');
         $this->noscript = $noscript;
-        $this->config = (object)config('scaffold.web.gtm');
     }
 
     /**
@@ -29,7 +29,7 @@ class Gtm extends Component
     public function render()
     {
         if ($this->config->id && env('APP_ENV') === 'production') {
-            return view('scaffold-component::gtm');
+            return view('scaffold-component::ga');
         }
     }
 }

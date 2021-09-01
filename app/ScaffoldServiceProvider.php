@@ -43,8 +43,11 @@ class ScaffoldServiceProvider extends ServiceProvider
     {
         // Blade directive: @route
         Blade::if('route', function($value) {
-            $route = request()->route()->getName() ?? request()->path();
-            return $route === $value;
+            return collect((array)$value)->contains(function($name) {
+                return request()->route()->getName() === $name
+                    || request()->path() === $name
+                    || request()->is($name);
+            });
         });
 
         // Blade components

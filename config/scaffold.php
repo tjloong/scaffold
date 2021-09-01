@@ -63,5 +63,31 @@ return [
                 'password.reset',
             ],
         ],
-    ]
+
+        /**
+         * Google Analytics configuration
+         */
+        'ga' => [
+            'id' => null,
+            'exclude_routes' => [
+                'login',
+                'verification.verify',
+                'password.forgot',
+                'password.reset',
+            ],
+        ],
+
+        /**
+         * Facebook pixel configuration
+         */
+        'fbpixel' => [
+            'id' => null,
+            'exclude_routes' => [
+                'login',
+                'verification.verify',
+                'password.forgot',
+                'password.reset',
+            ],
+        ],
+    ],
 ];
