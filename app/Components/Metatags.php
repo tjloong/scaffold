@@ -15,7 +15,7 @@ class Metatags extends Component
      */
     public function __construct()
     {
-        $this->config = (object)config('scaffold.view.metatags');
+        $this->config = (object)config('scaffold.web.metatags');
     }
 
     /**

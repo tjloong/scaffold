@@ -29,51 +29,6 @@ function get_url_mime_type($url)
 }
 
 /**
- * Set referal code into cookies for 7 days
- * 
- * @param boolean $isNew
- * @return void
- */
-function set_ref_to_cookies($isNew = true)
-{
-	if ($isNew) {
-		$ref = request()->query('ref');
-		$cookie = request()->cookie('_ref');
-	
-		if ($ref && $ref !== $cookie) {
-			Cookie::queue('_ref', $ref, (7 * 24 * 60));
-		}
-	}
-	else {
-		Cookie::expire('_ref');
-	}
-}
-
-/**
- * Get referal code from cookies
- */
-function get_ref_from_cookies()
-{
-	if ($ref = request()->query('ref')) return $ref;
-
-	return request()->cookie('_ref');
-}
-
-/**
- * Set locale from route prefix
- */
-function set_locale()
-{
-	$path = request()->path();
-	$params = explode('/', $path);
-	$locales = ['zh-my', 'en'];
-
-	if (in_array($params[0], $locales)) {
-		app()->setLocale($params[0]);
-	}
-}
-
-/**
  * Get current locale url
  */
 function locale_url($url)

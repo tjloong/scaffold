@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Password;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -30,9 +31,7 @@ trait AuthManager
      */
     public function showRegister()
     {
-        return request()->ref
-            ? view('auth.register', ['ref' => request()->ref])
-            : redirect('/');
+        return view('auth.register');
     }
 
     /**
@@ -104,6 +103,7 @@ trait AuthManager
             }
 
             Auth::login($user);
+            Cookie::expire('_ref');
 
             return $this->registered($user);
         }

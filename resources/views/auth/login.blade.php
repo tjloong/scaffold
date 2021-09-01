@@ -3,12 +3,12 @@
 @section('content')
     <div class="min-h-screen relative px-4 py-4 md:py-16">
         <div class="absolute inset-0">
-            <img src="/storage/img/{{ config('scaffold.view.blob_bg') }}" class="w-full h-full object-cover object-center opacity-50">
+            <img src="/storage/img/{{ config('scaffold.web.blob_bg') }}" class="w-full h-full object-cover object-center opacity-50">
         </div>
 
         <div class="max-w-md mx-auto relative">
             <a class="block w-20 mb-4" href="/">
-                <img src="/storage/img/{{ config('scaffold.view.logo') }}" class="w-full">
+                <img src="/storage/img/{{ config('scaffold.web.logo') }}" class="w-full">
             </a>
 
             <form method="POST" action="{{ route('login') }}">
@@ -53,7 +53,7 @@
                 <div class="mt-6 text-sm">
                     Don't have an account? 
 
-                    <a href="{{ route('register', ['ref' => 'login']) }}" class="text-blue-500 font-medium">
+                    <a href="{{ route('register', ['ref' => 'page-login']) }}" class="text-blue-500 font-medium">
                         Sign Up
                     </a>
                 </div>

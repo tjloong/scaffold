@@ -18,7 +18,7 @@ class Gtm extends Component
     public function __construct($noscript = false)
     {
         $this->noscript = $noscript;
-        $this->config = (object)config('scaffold.view.gtm');
+        $this->config = (object)config('scaffold.web.gtm');
     }
 
     /**

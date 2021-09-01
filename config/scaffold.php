@@ -2,9 +2,21 @@
 
 return [
     /**
-     * View configurations
+     * Website configurations
      */
-    'view' => [
+    'web' => [
+        'locales' => ['en'],
+
+        /**
+         * Track referral
+         */
+        'track_ref' => [
+            'duration' => 0,
+            'exclude_routes' => [
+                'app/*',
+            ],
+        ],
+
         /**
          * App logo
          */

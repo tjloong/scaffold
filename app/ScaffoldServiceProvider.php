@@ -2,10 +2,14 @@
 
 namespace Jiannius\Scaffold;
 
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Jiannius\Scaffold\Middlewares\TrackRef;
+use Jiannius\Scaffold\Middlewares\SetLocale;
 use Jiannius\Scaffold\Commands\InstallCommand;
+use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class ScaffoldServiceProvider extends ServiceProvider
 {
@@ -47,6 +51,11 @@ class ScaffoldServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views/components', 'scaffold-component');
         Blade::componentNamespace('Jiannius\\Scaffold\\Components', 'scaffold-component');
 
+        // Middlewares
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->prependMiddlewareToGroup('web', TrackRef::class);
+        $kernel->prependMiddlewareToGroup('web', SetLocale::class);
+
         // Helpers
         require_once __DIR__.'/../app/Helpers.php';
 
@@ -78,8 +87,8 @@ class ScaffoldServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__.'/../resources/views/auth', 'scaffold-auth');
 
         // add laravel sanctum middleware to kernel
-        $this->app->make(\Illuminate\Contracts\Http\Kernel::class)
-            ->prependMiddlewareToGroup('api', \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class);
+        $kernel = $this->app->make(Kernel::class);
+        $kernel->prependMiddlewareToGroup('api', EnsureFrontendRequestsAreStateful::class);
 
         // publishing
         if ($this->app->runningInConsole()) {

@@ -3,12 +3,12 @@
 @section('content')
 	<div class="min-h-screen relative px-4 py-4 md:py-20">
 		<div class="absolute inset-0">
-			<img src="/storage/img/{{ config('scaffold.view.blob_bg') }}" class="w-full h-full object-cover object-center opacity-50">
+			<img src="/storage/img/{{ config('scaffold.web.blob_bg') }}" class="w-full h-full object-cover object-center opacity-50">
 		</div>
 
 		<div class="relative max-w-md mx-auto">
 			<a href="/" class="mb-4">
-				<img src="/storage/img/{{ config('scaffold.view.logo') }}" class="w-20 mb-6">
+				<img src="/storage/img/{{ config('scaffold.web.logo') }}" class="w-20 mb-6">
 			</a>
 
 			<form method="POST" action="{{ route('password.reset') }}">
