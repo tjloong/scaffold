@@ -79,12 +79,14 @@ trait AuthManager
      */
     public function logout()
     {
+        $user = Auth::user();
+
         Auth::logout();
 
         request()->session()->invalidate();
         request()->session()->regenerateToken();
 
-        return $this->loggedOut();
+        return $this->loggedOut($user);
     }
 
     /**
