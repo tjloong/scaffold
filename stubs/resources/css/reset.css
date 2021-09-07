@@ -1,0 +1,17 @@
+input:focus, button:focus, select:focus, textarea:focus, div:focus, a:focus,
+input:active, button:active, select:active, textarea:active, div:active, a:active {
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+input::placeholder, select::placeholder, textarea::placeholder {
+    @apply text-sm;
+}
+
+label {
+    @apply font-bold;
+}
+
+a {
+    @apply cursor-pointer;
+}
