@@ -59,6 +59,7 @@ export default {
         token: String,
         errors: Object,
     },
+    metaInfo: { title: 'Reset Password' },
     data () {
         return {
             form: this.$inertia.form({

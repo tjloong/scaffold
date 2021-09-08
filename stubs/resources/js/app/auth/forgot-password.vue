@@ -49,6 +49,7 @@ export default {
     props: {
         errors: Object,
     },
+    metaInfo: { title: 'Reset Password Request' },
     data () {
         return {
             form: this.$inertia.form({

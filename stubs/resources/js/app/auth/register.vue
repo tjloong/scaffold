@@ -78,6 +78,7 @@ export default {
     components: {
         AuthFooter,
     },
+    metaInfo: { title: 'Create Your Account' },
     data () {
         return {
             form: this.$inertia.form({

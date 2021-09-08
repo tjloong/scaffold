@@ -68,6 +68,7 @@ export default {
         flash: String,
         errors: Object,
     },
+    metaInfo: { title: 'Login' },
     data () {
         return {
             form: this.$inertia.form({
