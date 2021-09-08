@@ -29,13 +29,7 @@
 </template>
 
 <script>
-import { Dropdown, AdminPanel } from '@jiannius/ui'
-
 export default {
     name: 'Layout',
-    components: {
-        Dropdown,
-        AdminPanel,
-    }
 }
 </script>

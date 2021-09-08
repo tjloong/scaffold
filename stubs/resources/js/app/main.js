@@ -3,13 +3,13 @@ import VueMeta from 'vue-meta'
 import { Inertia } from '@inertiajs/inertia'
 import { InertiaProgress } from '@inertiajs/progress'
 import { createInertiaApp, Link } from '@inertiajs/inertia-vue'
-import { Plugins } from '@jiannius/ui'
+import JianniusUI from '@jiannius/ui'
 import Layout from '@/app/layout'
 
 Vue.config.productionTip = false
 
 Vue.use(VueMeta)
-Vue.use(Plugins)
+Vue.use(JianniusUI, { themeColor: 'blue-500' })
 Vue.component('inertia-link', Link)
 
 Vue.mixin({ 
@@ -37,8 +37,6 @@ Vue.mixin({
 InertiaProgress.init()
 
 window.dd = console.log.bind(console)
-window._ = require('lodash')
-window.moment = require('moment')
 
 createInertiaApp({
     resolve: name => {
@@ -52,7 +50,6 @@ createInertiaApp({
         new Vue({
             metaInfo: {
                 titleTemplate: title => (title ? `${title} | App` : 'App'),
-                themeColor: 'orange-500',
             },
             render: h => h(app, props),
         }).$mount(el)

@@ -8,7 +8,6 @@
 /* Components */
 @import 'tailwindcss/components';
 @import 'table';
-@import 'form';
 
 /* Utilities */
 @import 'tailwindcss/utilities';

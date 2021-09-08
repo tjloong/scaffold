@@ -7,13 +7,8 @@
 </template>
 
 <script>
-import { Daterange } from '@jiannius/ui'
-
 export default {
     name: 'Home',
-    components: {
-        Daterange,
-    },
     metaInfo: { title: 'Dashboard' },
     data () {
         return {

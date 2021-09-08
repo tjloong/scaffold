@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen relative px-4 py-4 md:py-20">
+    <div class="min-h-screen relative px-4 pt-10 pb-20 md:py-20">
         <div class="absolute inset-0">
             <img src="/storage/img/blob-bg.svg" class="w-full h-full object-cover object-center opacity-50">
         </div>
