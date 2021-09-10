@@ -22,20 +22,6 @@ function app_version()
 }
 
 /**
- * Get url mime type
- */
-function get_url_mime_type($url)
-{
-	$contentType = collect(get_headers($url))->first(function($val, $key) {
-		return Str::startsWith($val, 'Content-Type');
-	});
-
-	$mime = Str::replaceFirst('Content-Type: ', '', $contentType);
-
-	return $mime;
-}
-
-/**
  * Get current locale url
  */
 function locale_url($url)

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\FileController;
 
 Route::prefix('app')->middleware('auth')->group(function () {
     /**
@@ -52,5 +53,15 @@ Route::prefix('app')->middleware('auth')->group(function () {
             Route::name('team.store')->post('store/{id?}', [TeamController::class, 'store']);
             Route::name('team.delete')->delete('/', [TeamController::class, 'delete']);
         });
+    });
+
+    /**
+     * File
+     */
+    Route::prefix('file')->group(function () {
+        Route::name('file.list')->get('list', [FileController::class, 'list']);
+        Route::name('file.upload')->post('upload', [FileController::class, 'upload']);
+        Route::name('file.store')->post('store/{id}', [FileController::class, 'store']);
+        Route::name('file.delete')->delete('/', [FileController::class, 'delete']);
     });
 });

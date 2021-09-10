@@ -37,6 +37,7 @@ Vue.mixin({
 InertiaProgress.init()
 
 window.dd = console.log.bind(console)
+window._ = require('lodash')
 
 createInertiaApp({
     resolve: name => {

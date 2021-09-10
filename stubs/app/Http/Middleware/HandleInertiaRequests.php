@@ -175,6 +175,11 @@ class HandleInertiaRequests extends Middleware
                         'active' => in_array($route, ['user.list', 'user.create', 'user.edit']),
                         'enabled' => $user && $user->can('settings-user.manage'),
                     ],
+                    [
+                        'label' => 'Files',
+                        'url' => route('file.list'),
+                        'active' => $route === 'file.list',
+                    ],
                 ],
             ],
         ];

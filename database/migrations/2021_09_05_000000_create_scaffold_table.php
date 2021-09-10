@@ -18,6 +18,7 @@ class CreateScaffoldTable extends Migration
         $this->createTeamsTables();
         $this->createRolesTables();
         $this->createAbilitiesTables();
+        $this->createFilesTable();
     }
 
     /**
@@ -169,6 +170,29 @@ class CreateScaffoldTable extends Migration
         else {
             Schema::dropIfExists('teams_users');
             Schema::dropIfExists('teams');
+        }
+    }
+
+    /**
+     * Create files table
+     * 
+     * @return void
+     */
+    public function createFilesTable($up = true)
+    {
+        if ($up) {
+            Schema::create('files', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('mime')->nullable();
+                $table->decimal('size', 20, 2)->nullable();
+                $table->string('url')->nullable();
+                $table->json('data')->nullable();
+                $table->timestamps();
+            });
+        }
+        else {
+            Schema::dropIfExists('files');
         }
     }
 

@@ -1,0 +1,74 @@
+<template>
+    <div class="max-w-screen-xl mx-auto">
+        <page-header title="Files">
+            <btn v-if="checked.length" color="red" :loading="deleting" inverted @click="destroy()">
+                Delete ({{ checked.length }})
+            </btn>
+
+            <btn v-else @click="$refs.uploader.open()">
+                Upload
+            </btn>
+        </page-header>
+
+        <div v-if="files.data.length" class="grid grid-cols-2 gap-4 md:grid-cols-6">
+            <template v-for="file in files.data">
+                <file-card :key="file.id" :file="file" @edit="$refs.form.open(file)" @checked="select(file)" />
+            </template>
+        </div>
+
+        <cta v-else />
+
+        <file-uploader
+            ref="uploader"
+            multiple
+            :url="route('file.upload')"
+            :accept="['image', 'pdf', 'youtube']"
+        />
+
+        <file-form ref="form" />
+    </div>
+</template>
+
+<script>
+import FileForm from './components/file-form.vue'
+
+export default {
+    name: 'FileList',
+    props: {
+        files: Object,
+    },
+    components: {
+        FileForm,
+    },
+    metaInfo: { title: 'Files' },
+    data () {
+        return {
+            checked: [],
+            deleting: false,
+        }
+    },
+    methods: {
+        select (file) {
+            const index = this.checked.findIndex(v => (v.id === file.id))
+
+            if (index === -1) this.checked.push(file)
+            else this.checked.splice(index, 1)
+        },
+        destroy () {
+            this.$confirm({
+                title: 'Delete Files?',
+                message: 'Are you sure to delete the selected files?',
+                onConfirmed: () => {
+                    this.deleting = true
+                    this.$inertia.delete(this.route('file.delete', { id: _.map(this.checked, 'id').join(',') }), {
+                        onSuccess: () => {
+                            this.deleting = false
+                            this.checked = []
+                        }
+                    })
+                },
+            })
+        }
+    }
+}
+</script>

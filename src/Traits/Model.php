@@ -45,7 +45,7 @@ trait Model
             $query->filter($filters);
         }
 
-        $limit = request()->limit ?: null;
+        $limit = request()->limit ?: 30;
         $orders = request()->order_by ?: null;
         $resource = $this->getJsonResource();
         $paginate = true;
@@ -65,7 +65,7 @@ trait Model
         }
 
         $collection = $paginate
-            ? $resource->collection($query->paginate($limit > 0 ? $limit : 20))
+            ? $resource->collection($query->paginate($limit))
             : $resource->collection($query->get());
 
         return isset($filters)
