@@ -10,17 +10,29 @@
             </btn>
         </page-header>
 
-        <div v-if="files.data.length" class="grid grid-cols-2 gap-4 md:grid-cols-6">
-            <template v-for="file in files.data">
-                <file-card :key="file.id" :file="file" @edit="$refs.form.open(file)" @checked="select(file)" />
-            </template>
-        </div>
+        <template v-if="files.data.length">
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-6">
+                <file-card 
+                    v-for="file in files.data"
+                    :key="file.id" 
+                    :file="file" 
+                    :checked="checked.some(v => (v.id === file.id))"
+                    @edit="$refs.form.open(file)" 
+                    @click="select(file)"
+                />
+            </div>
+
+            <div class="mt-8 px-4" v-if="files.meta.last_page > 1">
+                <pagination :meta="files.meta" />
+            </div>
+        </template>
 
         <cta v-else />
 
         <file-uploader
             ref="uploader"
             multiple
+            title="Upload Files"
             :url="route('file.upload')"
             :accept="['image', 'pdf', 'youtube']"
         />

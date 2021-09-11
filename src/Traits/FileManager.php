@@ -5,12 +5,10 @@ namespace Jiannius\Scaffold\Traits;
 use App\Models\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
+use Intervention\Image\ImageManagerStatic as Image;
 
 trait FileManager
 {
-    protected $compress = true;
-
 	/**
      * The "booted" method of the model.
      *
@@ -72,11 +70,8 @@ trait FileManager
      */
     public static function upload()
     {
-        if (request()->hasFile('upload.files')) {
+        if (request()->has('upload.files')) {
             return self::saveFromUploadedFiles(request()->file('upload.files'));
-        }
-        else if (request()->hasFile('upload.file')) {
-            return self::saveFromUploadedFiles([request()->file('upload.file')]);
         }
         else if (request()->has('upload.urls')) {
             return self::saveFromImageUrls(request()->input('upload.urls'));
@@ -110,31 +105,30 @@ trait FileManager
     /**
      * Save from uploaded files
      * 
-     * @param UploadedFile $input
+     * @param UploadedFile $inputs
      * @return File
      */
-    public static function saveFromUploadedFiles($input)
+    public static function saveFromUploadedFiles($inputs)
     {
         $ids = [];
-        $storage = self::getStorage();
 
-        foreach ($input as $data) {
-            $path = $storage->putFile(env('DO_SPACES_FOLDER'), $data->path(), 'public');
+        foreach ($inputs as $input) {
+            $data = self::compressFile($input);
             $file = File::create([
-                'name' => $data->getClientOriginalName(),
-                'mime' => $data->getClientMimeType(),
-                'size' => round($data->getSize()/1024/1024, 5),
-                'url' => env('DO_SPACES_CDN') . '/' . $path,
+                'name' => $data->name,
+                'mime' => $data->mime,
+                'size' => $data->size,
+                'url' => $data->url,
                 'data' => [
-                    'path' => $path,
+                    'path' => $data->path,
+                    'dimension' => $data->dimension,
                 ],
             ]);
 
             array_push($ids, $file->id);
         }
 
-        if (is_array($input)) return File::whereIn('id', $ids)->get();
-        else return File::find($ids[0]);
+        return File::whereIn('id', $ids)->get();
     }
 
     /**
@@ -148,14 +142,16 @@ trait FileManager
         $ids = [];
 
         foreach ($urls as $url) {
-            $intervention = new ImageManager();
-            $image = $intervention->make($url);
-            $mime = $image->mime();
+            $img = Image::make($url);
+            $mime = $img->mime();
 
             $file = File::create([
                 'name' => $url,
                 'mime' => $mime,
                 'url' => $url,
+                'data' => [
+                    'dimension' => $img->width() . 'x' . $img->height(),
+                ],
             ]);
 
             array_push($ids, $file->id);
@@ -188,5 +184,45 @@ trait FileManager
         }
 
         return File::whereIn('id', $ids)->get();
+    }
+
+    /**
+     * Compress file
+     * 
+     * @param UploadedFile $input
+     * @return object
+     */
+    public static function compressFile($input)
+    {
+        $storage = self::getStorage();
+        $name = $input->getClientOriginalName();
+        $mime = $input->getClientMimeType();
+        $size = $input->getSize();
+        $path = $input->path();
+
+        if (Str::startsWith($mime, 'image/')) {
+            $img = Image::make($path);
+
+            $img->resize(1200, 1200, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            })->save(null, 60);
+
+            clearstatcache();
+
+            $size = $img->filesize();
+            $dimension = $img->width() . 'x' . $img->height();
+        }
+
+        $dopath = $storage->putFile(env('DO_SPACES_FOLDER'), $path, 'public');
+
+        return (object)[
+            'name' => $name,
+            'mime' => $mime,
+            'size' => round($size/1024/1024, 5),
+            'url' => env('DO_SPACES_CDN') . '/' . $dopath,
+            'path' => $dopath,
+            'dimension' => $dimension ?? null,
+        ];
     }
 }

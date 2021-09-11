@@ -16,6 +16,8 @@ class FileController extends Controller
     {
         $files = File::fetch();
 
+        if (request()->isMethod('post')) return back()->with('options', $files);
+
         return inertia('settings/file/list', [
             'files' => $files,
         ]);

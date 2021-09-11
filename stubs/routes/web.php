@@ -59,7 +59,7 @@ Route::prefix('app')->middleware('auth')->group(function () {
      * File
      */
     Route::prefix('file')->group(function () {
-        Route::name('file.list')->get('list', [FileController::class, 'list']);
+        Route::name('file.list')->match(['get', 'post'], 'list', [FileController::class, 'list']);
         Route::name('file.upload')->post('upload', [FileController::class, 'upload']);
         Route::name('file.store')->post('store/{id}', [FileController::class, 'store']);
         Route::name('file.delete')->delete('/', [FileController::class, 'delete']);
