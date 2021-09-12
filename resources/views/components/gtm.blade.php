@@ -1,6 +1,4 @@
-@route($config->exclude_routes)
-
-@else
+@if (!$disabled)
     @if ($noscript)
         <!-- Google Tag Manager (noscript) -->
         <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $config->id }}"
@@ -17,4 +15,4 @@
         <!-- End Google Tag Manager -->
 
     @endif
-@endroute
+@endif

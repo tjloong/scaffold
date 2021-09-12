@@ -1,6 +1,4 @@
-@route($config->exclude_routes)
-
-@else
+@if (!$disabled)
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ ((array)$config->id)[0] }}"></script>
     <script>
@@ -12,5 +10,5 @@
         gtag('config', '{{ $id }}');
     @endforeach
     </script>
-@endroute
+@endif
 

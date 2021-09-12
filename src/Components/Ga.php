@@ -29,7 +29,11 @@ class Ga extends Component
     public function render()
     {
         if ($this->config->id && env('APP_ENV') === 'production') {
-            return view('scaffold-component::ga');
+            return view('scaffold::components.ga', [
+                'disabled' => collect($this->config->exclude_paths)->contains(function ($path) {
+                    return request()->is($path);
+                }),
+            ]);
         }
     }
 }

@@ -8,6 +8,7 @@
             ref="picker" 
             :placeholder="placeholder" 
             :url="route('user.list')" 
+            :payload="{ order_by: 'name__asc' }"
             @input="$emit('input', $event)" 
         >
             <template #option="val">

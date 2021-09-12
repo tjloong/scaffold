@@ -29,7 +29,11 @@ class FbPixel extends Component
     public function render()
     {
         if ($this->config->id && env('APP_ENV') === 'production') {
-            return view('scaffold-component::fb-pixel');
+            return view('scaffold::components.fb-pixel', [
+                'disabled' => collect($this->config->exclude_paths)->contains(function ($path) {
+                    return request()->is($path);
+                }),
+            ]);
         }
     }
 }

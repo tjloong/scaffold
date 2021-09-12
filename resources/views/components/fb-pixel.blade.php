@@ -1,6 +1,4 @@
-@route($config->exclude_routes)
-
-@else
+@if (!$disabled)
     @if ($noscript)
         @foreach ((array)$config->id as $id)
             <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id={{ $id }}&ev=PageView&noscript=1" />
@@ -26,5 +24,5 @@
         </script>
         <!-- End Facebook Pixel Code -->
     @endif
-@endroute
+@endif
 

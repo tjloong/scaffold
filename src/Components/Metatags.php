@@ -25,57 +25,60 @@ class Metatags extends Component
      */
     public function render()
     {
-        $route = request()->route()->getName() ?? request()->path();
-
-        return view('scaffold-component::metatags', [
-            'disabled' => $this->isRouteExcluded($route),
-            'noindex' => $this->isNoIndex($route),
-            'hreflang' => $this->getHreflang($route),
-            'canonical' => $this->getCanonical($route),
+        return view('scaffold::components.metatags', [
+            'disabled' => $this->isRouteExcluded(),
+            'noindex' => $this->isNoIndex(),
+            'hreflang' => $this->getHreflang(),
+            'canonical' => $this->getCanonical(),
         ]);
     }
 
     /**
      * Check current route is excluded from rendering
      * 
-     * @param string $route
      * @return boolean
      */
-    public function isRouteExcluded($route)
+    public function isRouteExcluded()
     {
-        return in_array($route, $this->config->exclude_routes);
+        return collect($this->config->exclude_paths)->contains(function ($path) {
+            return request()->is($path);
+        });
     }
 
     /**
      * Determine whether current route should disable index
      * 
-     * @param string $route
      * @return boolean
      */
-    public function isNoIndex($route)
+    public function isNoIndex()
     {
-        return $this->config->noindex === true || in_array($route, $this->config->noindex_routes);
+        return $this->config->noindex === true
+            || collect($this->config->noindex_paths)->contains(function ($path) {
+                return request()->is($path);
+            });
     }
 
     /**
      * Get the hreflang attributes for current route
      * 
-     * @param string $route
      * @return string
      */
-    public function getHreflang($route)
+    public function getHreflang()
     {
-        return $this->config->hreflang[$route] ?? false;
+        return collect($this->config->hreflang)->first(function ($value, $key) {
+            return request()->is($key);
+        });
     }
 
     /**
      * Get the canonical attributes for current route
      * 
-     * @param string $route
      * @return string
      */
-    public function getCanonical($route)
+    public function getCanonical()
     {
-        return $this->config->canonical[$route] ?? false;
+        return collect($this->config->canonical)->first(function ($value, $key) {
+            return request()->is($key);
+        });
     }
 }

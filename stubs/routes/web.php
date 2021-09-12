@@ -5,7 +5,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\PageController;
 
+/**
+ * App routes
+ */
 Route::prefix('app')->middleware('auth')->group(function () {
     /**
      * Dashboard
@@ -65,3 +69,8 @@ Route::prefix('app')->middleware('auth')->group(function () {
         Route::name('file.delete')->delete('/', [FileController::class, 'delete']);
     });
 });
+
+/**
+ * Web routes
+ */
+Route::name('page.show')->get('{any?}', [PageController::class, 'show'])->where(['any' => '.*']);

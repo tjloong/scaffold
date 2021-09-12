@@ -18,7 +18,7 @@ class TrackRef
     public function handle($request, Closure $next)
     {
         if ($request->isMethod('get') && $duration = config('scaffold.web.track_ref.duration')) {
-            if (!$this->isRouteExcluded($request)) {
+            if (!$this->isPathExcluded($request)) {
                 $ref = request()->query('ref');
                 $cookie = $this->getCookie();
     
@@ -34,7 +34,7 @@ class TrackRef
                 }
                 // if visit to register page with no ref and no ref cookie, 
                 // redirect to avoid bot signup
-                else if (!$ref && $request->route()->getName() === 'register') {
+                else if (!$ref && $request->is('register/*')) {
                     return redirect('/');
                 }
             }
@@ -48,14 +48,12 @@ class TrackRef
      * 
      * @return boolean
      */
-    public function isRouteExcluded($request)
+    public function isPathExcluded($request)
     {
-        $list = config('scaffold.web.track_ref.exclude_routes');
+        $list = config('scaffold.web.track_ref.exclude_paths');
 
-        return collect($list)->contains(function($name) {
-            return $name === request()->route()->getName()
-                || $name === request()->path()
-                || request()->is($name);
+        return collect($list)->contains(function ($path) use ($request) {
+            return $request->is($path);
         });
     }
 
