@@ -16,7 +16,7 @@ trait HasRole
      */
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class)->withoutGlobalScopes();
     }
 
     /**

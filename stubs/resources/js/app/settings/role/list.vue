@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
         <page-header v-if="route().current() === 'role.list'" title="Roles">
-            <btn v-if="$can('settings-role.manage')" :href="route('role.create')">
+            <btn v-if="can.create" :href="route('role.create')">
                 New Role
             </btn>
         </page-header>
@@ -18,6 +18,7 @@
 export default {
     name: 'RoleList',
     props: {
+        can: Object,
         roles: Object,
     },
     metaInfo: { title: 'Roles' },
@@ -27,7 +28,7 @@ export default {
                 {
                     key: 'name',
                     sort: 'name',
-                    link: (role) => (this.$can('settings-role.manage') && this.route('role.edit', { id: role.id })),
+                    link: (role) => (role.can.edit && this.route('role.edit', { id: role.id })),
                 },
                 {
                     key: 'access',

@@ -10,6 +10,19 @@ class Role extends Model
     ];
 
     /**
+     * The booted method for model
+     * 
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope('role', function ($query) {
+            if (request()->user()->is('root')) return $query;
+            else return $query->where('id', '>', 1);
+        });
+    }
+
+    /**
      * Get abilities for role
      */
     public function abilities()
@@ -54,6 +67,6 @@ class Role extends Model
      */
     public function isRoot()
     {
-        return $this->name === 'root';
+        return $this->access === 'root';
     }
 }

@@ -61,6 +61,13 @@ class CreateScaffoldTable extends Migration
     
             DB::table('roles')->insert([
                 [
+                    'name' => 'Root',
+                    'access' => 'root',
+                    'is_system' => true,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
                     'name' => 'Administrator', 
                     'access' => 'global',
                     'is_system' => true,

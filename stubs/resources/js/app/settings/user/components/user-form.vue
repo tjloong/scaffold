@@ -38,7 +38,7 @@
             </div>
 
             <template #buttons>
-                <btn submit color="green-500" :loading="form.processing">
+                <btn submit color="green" :loading="form.processing">
                     Save User
                 </btn>
             </template>

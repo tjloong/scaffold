@@ -29,6 +29,13 @@ class User extends JsonResource
             'role' => new Role($this->role),
             'teams' => Team::collection($this->teams),
             'abilities' => Ability::collection($this->abilities),
+
+            // permissions
+            'can' => [
+                'edit' => request()->user()->can('settings-user.manage'),
+                'delete' => request()->user()->can('settings-user.manage')
+                    && $this->id !== request()->user()->id,
+            ],
         ];
     }
 }

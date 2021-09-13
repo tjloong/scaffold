@@ -17,7 +17,7 @@
                 </div>
             </field>
 
-            <btn submit color="green-500">
+            <btn submit color="green">
                 Save Permissions
             </btn>
         </form>

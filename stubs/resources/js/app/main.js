@@ -20,9 +20,6 @@ Vue.mixin({
     },
     methods: { 
         route,
-        $can (ability) {
-            return this.$page.props.auth.perm[ability] || false
-        },
         $reload () {
             this.$inertia.reload({ preserveState: false, preserveScroll: false })
             window.removeEventListener('popstate', this.$reload)

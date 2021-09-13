@@ -24,6 +24,13 @@ class Role extends JsonResource
 
             // relationship
             'abilities' => Ability::collection($this->abilities),
+
+            // permissions
+            'can' => [
+                'edit' => request()->user()->can('settings-role.manage'),
+                'delete' => request()->user()->can('settings-role.manage')
+                    && !$this->is_system,
+            ],
         ];
     }
 }

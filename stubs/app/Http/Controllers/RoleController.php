@@ -60,6 +60,7 @@ class RoleController extends Controller
 
         return inertia('settings/role/list', [
             'roles' => $roles,
+            'can.create' => request()->user()->can('settings-role.manage'),
         ]);
     }
 

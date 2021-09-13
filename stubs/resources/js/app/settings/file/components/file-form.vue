@@ -14,10 +14,9 @@
             </div>
 
             <template v-else>
-                <div class="field-display">
-                    <label>File Type</label>
+                <field label="File Type">
                     {{ file.type.toUpperCase() }}
-                </div>
+                </field>
             </template>
 
             <field label="Name" v-model="file.name" required />

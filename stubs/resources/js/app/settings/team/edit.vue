@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
         <page-header :title="team.name" back>
-            <btn color="red-500" inverted @click="destroy()">
+            <btn v-if="team.can.delete" color="red" inverted @click="destroy()">
                 <icon name="trash" /> Delete
             </btn>
         </page-header>

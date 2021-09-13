@@ -50,6 +50,7 @@ class TeamController extends Controller
 
         return inertia('settings/team/list', [
             'teams' => $teams,
+            'can.create' => request()->user()->can('settings-team.manage'),
         ]);
     }
 
@@ -85,6 +86,6 @@ class TeamController extends Controller
 
         Team::whereIn('id', explode(',', request()->id))->delete();
 
-        return redirect()->route('team.list')->with('toast', 'Team Deleted::alert');
+        return redirect()->route('team.list')->with('toast', 'Team Deleted');
     }
 }

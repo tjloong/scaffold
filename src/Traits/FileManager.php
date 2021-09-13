@@ -42,6 +42,18 @@ trait FileManager
     }
 
     /**
+     * Get size attribute
+     * 
+     * @param float $size
+     * @return string
+     */
+    public function getSizeAttribute($size)
+    {
+        if ($size < 1) return round($size * 1000, 2) . ' KB';
+        else return round($size, 2) . ' MB';
+    }
+
+    /**
      * Get file type attribute
      * 
      * @return string

@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
         <page-header :title="user.name" back>
-            <btn v-if="$can('settings-user.manage') && user.id !== $user.id" color="red-500" inverted @click="destroy()">
+            <btn v-if="user.can.delete" color="red" inverted @click="destroy()">
                 <icon name="trash" /> Delete
             </btn>
         </page-header>

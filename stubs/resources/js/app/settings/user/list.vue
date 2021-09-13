@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
         <page-header v-if="route().current() === 'user.list'" title="Users">
-            <btn v-if="$can('settings-user.manage')" :href="route('user.create')">
+            <btn v-if="can.create" :href="route('user.create')">
                 New User
             </btn>
         </page-header>
@@ -18,6 +18,7 @@
 export default {
     name: 'UserList',
     props: {
+        can: Object,
         users: Object,
     },
     metaInfo: { title: 'Users' },
@@ -27,7 +28,7 @@ export default {
                 {
                     key: 'name',
                     sort: 'name',
-                    link: (user) => (this.$can('settings-user.manage') && this.route('user.edit', { id: user.id })),
+                    link: (user) => (user.can.edit && this.route('user.edit', { id: user.id })),
                     small: (user) => (user.email),
                 },
                 {

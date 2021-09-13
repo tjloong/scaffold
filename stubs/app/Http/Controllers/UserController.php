@@ -82,6 +82,7 @@ class UserController extends Controller
 
         return inertia('settings/user/list', [
             'users' => $users,
+            'can.create' => request()->user()->can('settings-user.manage'),
         ]);
     }
 

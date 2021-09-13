@@ -20,7 +20,7 @@ class TrackRef
         if ($request->isMethod('get') && $duration = config('scaffold.web.track_ref.duration')) {
             if (!$this->isPathExcluded($request)) {
                 $ref = request()->query('ref');
-                $cookie = $this->getCookie();
+                $cookie = request()->cookie('_ref');
     
                 // ref is trackable
                 if ($ref && $this->isTrackable($ref)) {
@@ -55,23 +55,6 @@ class TrackRef
         return collect($list)->contains(function ($path) use ($request) {
             return $request->is($path);
         });
-    }
-
-    /**
-     * Get cookie
-     * 
-     * @return string
-     */
-    public function getCookie()
-    {
-        $value = request()->cookie('_ref');
-
-        if (!$value) return null;
-
-        $decrypt = explode('|', decrypt($value, false));
-        $cookie = end($decrypt);
-
-        return $cookie;
     }
 
     /**

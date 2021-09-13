@@ -2,8 +2,8 @@
     <div class="max-w-lg mx-auto">
         <page-header :title="role.name" back>
             <btn 
-                v-if="$can('settings-role.manage') && !['Administrator', 'Restricted User'].includes(role.name)" 
-                color="red-500" 
+                v-if="role.can.delete" 
+                color="red" 
                 inverted 
                 @click="destroy()"
             >
