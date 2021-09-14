@@ -15,7 +15,7 @@ class TeamStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
+            'team.name' => [
                 'sometimes',
                 'required',
                 Rule::unique('teams', 'name')->ignore(request()->input('id')),
@@ -31,8 +31,8 @@ class TeamStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Team name is required.',
-            'name.unique' => 'There is another team with the same name.',
+            'team.name.required' => 'Team name is required.',
+            'team.name.unique' => 'There is another team with the same name.',
         ];
     }
 }

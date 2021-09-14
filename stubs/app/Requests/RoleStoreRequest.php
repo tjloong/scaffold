@@ -15,7 +15,7 @@ class RoleStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
+            'role.name' => [
                 'sometimes',
                 'required',
                 Rule::unique('roles', 'name')->ignore(request()->input('id')),
@@ -31,8 +31,8 @@ class RoleStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Role name is required.',
-            'name.unique' => 'There is another role with the same name.',
+            'role.name.required' => 'Role name is required.',
+            'role.name.unique' => 'There is another role with the same name.',
         ];
     }
 }

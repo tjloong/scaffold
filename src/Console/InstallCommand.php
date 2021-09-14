@@ -73,7 +73,7 @@ class InstallCommand extends Command
                 // '@jiannius/ui' => '^1.0.0',
                 '@tailwindcss/forms' => '^0.2.1',
                 '@tailwindcss/typography' => '^0.3.0',
-                'moment' => '^2.29.1',
+                'dayjs' => '^1.10.6',
                 'postcss-import' => '^12.0.1',
                 'postcss-nesting' => '^7.0.1',
                 'tailwindcss' => '^2.1.2',

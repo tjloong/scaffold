@@ -20,7 +20,7 @@
                     { value: 'users', label: 'Users' },
                 ]"
                 :value="tab"
-                @input="$inertia.visit(route('role.edit', { id: role.id, tab: $event }), { replace: true })"
+                @input="$inertia.visit(route('settings-role.edit', { id: role.id, tab: $event }), { replace: true })"
             />
 
             <btn v-if="tab === 'users'" inverted @click="$refs.userPicker.open()">
@@ -42,7 +42,7 @@
 
         <template v-if="tab === 'users'">
             <user-list :users="users" />
-            <async-picker ref="userPicker" placeholder="Assign User" :url="route('user.list')" @input="assignUser" />
+            <async-picker ref="userPicker" placeholder="Assign User" :url="route('settings-user.list')" @input="assignUser" />
         </template>
 
     </div>
@@ -76,7 +76,7 @@ export default {
                 title: 'Delete Role',
                 message: `Are you sure to delete role ${this.role.name}?`,
                 onConfirmed: () => {
-                    this.$inertia.delete(this.route('role.delete', { id: this.role.id }))
+                    this.$inertia.delete(this.route('settings-role.delete', { id: this.role.id }))
                 }
             })
         },
@@ -90,7 +90,7 @@ export default {
                     id: this.role.id,
                     abilities: _.map(abilities.filter(val => (val.enabled)), 'id'),
                 })
-                .post(this.route('role.store', { id: this.role.id }))
+                .post(this.route('settings-role.store', { id: this.role.id }))
         },
         assignUser (user) {
             this.$inertia
@@ -98,7 +98,7 @@ export default {
                     id: user.id,
                     role_id: this.role.id,
                 })
-                .post(this.route('user.store', { id: user.id }))
+                .post(this.route('settings-user.store', { id: user.id }))
         },
     }
 }

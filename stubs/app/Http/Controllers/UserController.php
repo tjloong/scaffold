@@ -98,23 +98,21 @@ class UserController extends Controller
 
         $user = User::findOrNew($request->id);
 
-        $user->fill($request->all())->save();
+        $user->fill($request->input('user'))->save();
 
-        if ($request->has('abilities')) {
+        if ($request->has('user.abilities')) {
             $user->abilities()->sync($request->input('abilities'));
         }
 
-        if ($request->has('teams')) {
+        if ($request->has('user.teams')) {
             $user->teams()->sync($request->input('teams'));
         }
 
-        if (!$request->id) {
-            $user->invite();
-
-            return redirect()->route('user.edit', ['id' => $user->id])->with('toast', 'User Created::success');
+        if ($request->id) return back()->with('toast', 'User Updated::success');
+        else {
+            $user->invite();    
+            return redirect()->route('settings-user.edit', ['id' => $user->id])->with('toast', 'User Created::success');
         }
-
-        return back()->with('toast', 'User Updated::success');
     }
 
     /**
@@ -142,6 +140,6 @@ class UserController extends Controller
             ->whereIn('id', explode(',', request()->id))
             ->delete();
 
-        return redirect()->route('user.list')->with('toast', 'User Deleted');
+        return redirect()->route('settings-user.list')->with('toast', 'User Deleted');
     }
 }

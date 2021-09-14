@@ -36,9 +36,10 @@ trait Model
      *
      * @param Builder $query
      * @param boolean $filterFromQuery
+     * @param boolean $returnBuilder
      * @return Collection
      */
-    public function scopeFetch($query, $filterFromQuery = true)
+    public function scopeFetch($query, $filterFromQuery = true, $returnBuilder = false)
     {
         if ($filterFromQuery) {
             $filters = $this->getFiltersFromQuery();
@@ -64,13 +65,16 @@ trait Model
             }
         }
 
-        $collection = $paginate
-            ? $resource->collection($query->paginate($limit))
-            : $resource->collection($query->get());
-
-        return isset($filters)
-            ? $collection->additional(['meta' => ['filters' => $filters]])
-            : $collection;
+        if ($returnBuilder) return $query;
+        else {
+            $collection = $paginate
+                ? $resource->collection($query->paginate($limit))
+                : $resource->collection($query->get());
+    
+            return isset($filters)
+                ? $collection->additional(['meta' => ['filters' => $filters]])
+                : $collection;
+        }
     }
 
     /**

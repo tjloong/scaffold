@@ -7,7 +7,7 @@
         <async-picker 
             ref="picker" 
             :placeholder="placeholder" 
-            :url="route('user.list')" 
+            :url="route('settings-user.list')" 
             :payload="{ order_by: 'name__asc' }"
             @input="$emit('input', $event)" 
         >

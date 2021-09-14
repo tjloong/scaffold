@@ -193,7 +193,7 @@ class CreateScaffoldTable extends Migration
                 $table->string('name');
                 $table->string('mime')->nullable();
                 $table->decimal('size', 20, 2)->nullable();
-                $table->string('url')->nullable();
+                $table->text('url')->nullable();
                 $table->json('data')->nullable();
                 $table->timestamps();
             });

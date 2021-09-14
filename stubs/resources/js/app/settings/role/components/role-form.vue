@@ -14,12 +14,12 @@
 
         <box v-else>
             <div class="p-5">
-                <field label="Role Name" v-model="form.name" :error="errors.name" required />
+                <field label="Role Name" v-model="form.role.name" :error="errors.name" required />
 
                 <field 
-                    v-if="!form.id"
+                    v-if="!form.role.id"
                     label="Clone From Role" 
-                    v-model="form.clone_from_id" 
+                    v-model="form.role.clone_from_id" 
                     type="select"
                     placeholder="Select role to clone from"
                     :options="clonables.map(val => ({
@@ -29,7 +29,7 @@
                 />
 
                 <field label="Scope">
-                    <role-scope-input v-model="form.access" />
+                    <role-scope-input v-model="form.role.access" />
                 </field>
             </div>
 
@@ -57,7 +57,7 @@ export default {
     },
     data () {
         return {
-            form: this.$inertia.form({
+            form: this.$inertia.form({ role: {
                 name: null,
                 access: 'global',
                 clone_from_id: null,
@@ -66,7 +66,7 @@ export default {
                     'name',
                     'access',
                 ]),
-            })
+            }})
         }
     },
     computed: {
@@ -76,7 +76,7 @@ export default {
     },
     methods: {
         submit () {
-            this.form.post(this.route('role.store'), { replace: true })
+            this.form.post(this.route('settings-role.store'))
         },
     }
 }

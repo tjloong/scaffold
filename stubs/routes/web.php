@@ -17,60 +17,65 @@ Route::prefix('app')->middleware('auth')->group(function () {
     Route::inertia('/', 'dashboard')->name('dashboard');
 
     /**
-     * User
+     * Settings
      */
-    Route::prefix('user')->group(function () {
-        Route::name('user.account')->match(['get', 'post'], 'account', [UserController::class, 'account']);
-        Route::name('user.list')->post('list', [UserController::class, 'list']);
-
-        Route::middleware('can:settings-user.manage')->group(function () {
-            Route::name('user.list')->get('list', [UserController::class, 'list']);
-            Route::name('user.create')->get('create', [UserController::class, 'create']);
-            Route::name('user.edit')->get('edit/{id}', [UserController::class, 'edit']);
-            Route::name('user.invite')->post('invite/{id}', [UserController::class, 'invite']);
-            Route::name('user.store')->post('store/{id?}', [UserController::class, 'store']);
-            Route::name('user.delete')->delete('/', [UserController::class, 'delete']);
+    Route::prefix('settings')->group(function () {
+        /**
+         * User settings
+         */
+        Route::prefix('user')->group(function () {
+            Route::match(['get', 'post'], 'account', [UserController::class, 'account'])->name('settings-user.account');
+            Route::post('list', [UserController::class, 'list'])->name('settings-user.list');
+    
+            Route::middleware('can:settings-user.manage')->group(function () {
+                Route::get('list', [UserController::class, 'list'])->name('settings-user.list');
+                Route::get('create', [UserController::class, 'create'])->name('settings-user.create');
+                Route::get('edit/{id}', [UserController::class, 'edit'])->name('settings-user.edit');
+                Route::post('invite/{id}', [UserController::class, 'invite'])->name('settings-user.invite');
+                Route::post('store/{id?}', [UserController::class, 'store'])->name('settings-user.store');
+                Route::delete('/', [UserController::class, 'delete'])->name('settings-user.delete');
+            });
         });
-    });
-
-    /**
-     * Role
-     */
-    Route::prefix('role')->middleware('can:settings-role.manage')->group(function () {
-        Route::name('role.list')->get('list', [RoleController::class, 'list']);
-        Route::name('role.create')->get('create', [RoleController::class, 'create']);
-        Route::name('role.edit')->get('edit/{id}/{tab?}', [RoleController::class, 'edit']);
-        Route::name('role.store')->post('store/{id?}', [RoleController::class, 'store']);
-        Route::name('role.delete')->delete('/', [RoleController::class, 'delete']);
-    });
-
-    /**
-     * Team
-     */
-    Route::prefix('team')->group(function () {
-        Route::name('team.list')->post('list', [TeamController::class, 'list']);
-
-        Route::middleware('can:settings-team.manage')->group(function () {
-            Route::name('team.list')->get('list', [TeamController::class, 'list']);
-            Route::name('team.create')->get('create', [TeamController::class, 'create']);
-            Route::name('team.edit')->get('edit/{id}', [TeamController::class, 'edit']);
-            Route::name('team.store')->post('store/{id?}', [TeamController::class, 'store']);
-            Route::name('team.delete')->delete('/', [TeamController::class, 'delete']);
+    
+        /**
+         * Role settings
+         */
+        Route::prefix('role')->middleware('can:settings-role.manage')->group(function () {
+            Route::get('list', [RoleController::class, 'list'])->name('settings-role.list');
+            Route::get('create', [RoleController::class, 'create'])->name('settings-role.create');
+            Route::get('edit/{id}/{tab?}', [RoleController::class, 'edit'])->name('settings-role.edit');
+            Route::post('store/{id?}', [RoleController::class, 'store'])->name('settings-role.store');
+            Route::delete('/', [RoleController::class, 'delete'])->name('settings-role.delete');
         });
-    });
+    
+        /**
+         * Team settings
+         */
+        Route::prefix('team')->group(function () {
+            Route::post('list', [TeamController::class, 'list'])->name('settings-team.list');
+    
+            Route::middleware('can:settings-team.manage')->group(function () {
+                Route::get('list', [TeamController::class, 'list'])->name('settings-team.list');
+                Route::get('create', [TeamController::class, 'create'])->name('settings-team.create');
+                Route::get('edit/{id}', [TeamController::class, 'edit'])->name('settings-team.edit');
+                Route::post('store/{id?}', [TeamController::class, 'store'])->name('settings-team.store');
+                Route::delete('/', [TeamController::class, 'delete'])->name('settings-team.delete');
+            });
+        });
 
-    /**
-     * File
-     */
-    Route::prefix('file')->group(function () {
-        Route::name('file.list')->match(['get', 'post'], 'list', [FileController::class, 'list']);
-        Route::name('file.upload')->post('upload', [FileController::class, 'upload']);
-        Route::name('file.store')->post('store/{id}', [FileController::class, 'store']);
-        Route::name('file.delete')->delete('/', [FileController::class, 'delete']);
+        /**
+         * File settings
+         */
+        Route::prefix('file')->group(function () {
+            Route::match(['get', 'post'], 'list', [FileController::class, 'list'])->name('settings-file.list');
+            Route::post('upload', [FileController::class, 'upload'])->name('settings-file.upload');
+            Route::post('store/{id}', [FileController::class, 'store'])->name('settings-file.store');
+            Route::delete('/', [FileController::class, 'delete'])->name('settings-file.delete');
+        });
     });
 });
 
 /**
  * Web routes
  */
-Route::name('page.show')->get('{any?}', [PageController::class, 'show'])->where(['any' => '.*']);
+Route::get('{any?}', [PageController::class, 'show'])->where(['any' => '.*'])->name('page.show');

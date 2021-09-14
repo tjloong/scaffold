@@ -76,21 +76,21 @@ class RoleController extends Controller
 
         $role = Role::findOrNew($request->id);
 
-        $role->fill($request->all())->save();
+        $role->fill($request->input('role'))->save();
 
-        if ($request->has('clone_from_id') && !$request->has('id')) {
+        if ($request->has('role.clone_from_id') && !$request->has('id')) {
             if ($source = Role::find($request->input('clone_from_id'))) {
                 $role->abilities()->sync($source->abilities->pluck('id')->toArray());
             }
         }
 
-        if ($request->has('abilities')) {
+        if ($request->has('role.abilities')) {
             $role->abilities()->sync($request->input('abilities'));
         }
 
-        if (!$request->id) return redirect()->route('role.edit', ['id' => $role->id])->with('toast', 'Role Created::success');
-
-        return back()->with('toast', 'Role Updated::success');
+        return $request->id
+            ? back()->with('toast', 'Role Updated::success')
+            : redirect()->route('settings-role.edit', ['id' => $role->id])->with('toast', 'Role Created::success');
     }
 
     /**
@@ -106,6 +106,6 @@ class RoleController extends Controller
 
         Role::whereIn('id', explode(',', request()->id))->delete();
 
-        return redirect()->route('role.list')->with('toast', 'Role Deleted');
+        return redirect()->route('settings-role.list')->with('toast', 'Role Deleted');
     }
 }

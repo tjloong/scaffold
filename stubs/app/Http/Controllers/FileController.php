@@ -32,7 +32,7 @@ class FileController extends Controller
     {
         $files = File::upload();
 
-        return back()->with('toast', 'Files Saved::success');
+        return back()->with('options', $files);
     }
 
     /**
@@ -63,6 +63,6 @@ class FileController extends Controller
             $file->delete();
         });
 
-        return redirect()->route('file.list')->with('toast', 'Files Deleted');
+        return redirect()->route('settings-file.list')->with('toast', 'Files Deleted');
     }
 }

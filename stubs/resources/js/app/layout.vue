@@ -7,7 +7,7 @@
                 </div>
 
                 <template #items>
-                    <inertia-link :href="route('user.account')">
+                    <inertia-link :href="route('settings-user.account')">
                         <icon name="user-circle" /> My Account
                     </inertia-link>
 

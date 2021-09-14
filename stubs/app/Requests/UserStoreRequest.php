@@ -15,13 +15,13 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'sometimes|required',
-            'email' => [
+            'user.name' => 'sometimes|required',
+            'user.email' => [
                 'sometimes',
                 'required',
                 Rule::unique('users', 'email')->ignore($this->input('id')),
             ],
-            'role_id' => 'sometimes|required',
+            'user.role_id' => 'sometimes|required',
         ];
     }
 
@@ -33,10 +33,10 @@ class UserStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Name is required.',
-            'email.required' => 'Login email is required.',
-            'email.unique' => 'There is already another account with the same email.',
-            'role_id.required' => 'Please assign a role to user.',
+            'user.name.required' => 'Name is required.',
+            'user.email.required' => 'Login email is required.',
+            'user.email.unique' => 'There is already another account with the same email.',
+            'user.role_id.required' => 'Please assign a role to user.',
         ];
     }
 }

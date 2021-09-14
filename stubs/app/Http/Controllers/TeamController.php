@@ -66,11 +66,11 @@ class TeamController extends Controller
 
         $team = Team::findOrNew($request->id);
 
-        $team->fill($request->all())->save();
+        $team->fill($request->input('team'))->save();
 
-        if (!$request->id) return redirect()->route('team.edit', ['id' => $team->id])->with('toast', 'Team Created::success');
-
-        return back()->with('toast', 'Team Updated::success');
+        return $request->id
+            ? back()->with('toast', 'Team Updated::success')
+            : redirect()->route('settings-team.edit', ['id' => $team->id])->with('toast', 'Team Created::success');
     }
 
     /**
@@ -86,6 +86,6 @@ class TeamController extends Controller
 
         Team::whereIn('id', explode(',', request()->id))->delete();
 
-        return redirect()->route('team.list')->with('toast', 'Team Deleted');
+        return redirect()->route('settings-team.list')->with('toast', 'Team Deleted');
     }
 }

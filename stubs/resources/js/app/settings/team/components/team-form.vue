@@ -2,8 +2,8 @@
     <form @submit.prevent="submit()">
         <box>
             <div class="p-5">
-                <field label="Team Name" v-model="form.name" :error="errors.name" required />
-                <field label="Description" type="textarea" v-model="form.description" :error="errors.description" />
+                <field label="Team Name" v-model="form.team.name" :error="errors.name" required />
+                <field label="Description" type="textarea" v-model="form.team.description" :error="errors.description" />
             </div>
 
             <template #buttons>
@@ -24,7 +24,7 @@ export default {
     },
     data () {
         return {
-            form: this.$inertia.form({
+            form: this.$inertia.form({ team: {
                 name: null,
                 description: null,
                 ..._.pick(this.team, [
@@ -32,12 +32,12 @@ export default {
                     'name',
                     'description',
                 ]),
-            })
+            }})
         }
     },
     methods: {
         submit () {
-            this.form.post(this.route('team.store'), { replace: true })
+            this.form.post(this.route('settings-team.store'))
         },
     }
 }

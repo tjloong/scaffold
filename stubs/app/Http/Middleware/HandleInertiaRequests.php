@@ -139,6 +139,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function getNavs($request)
     {
+        if (!$request->user()) return [];
+
         $user = $request->user();
         $route = $request->route()->getName();
         $navs = [
@@ -154,31 +156,31 @@ class HandleInertiaRequests extends Middleware
                 'dropdown' => [
                     [
                         'label' => 'My Account',
-                        'url' => route('user.account'),
-                        'active' => $route === 'user.account',
+                        'url' => route('settings-user.account'),
+                        'active' => $route === 'settings-user.account',
                     ],
                     [
                         'label' => 'Teams',
-                        'url' => route('team.list'),
-                        'active' => in_array($route, ['team.list', 'team.create', 'team.edit']),
+                        'url' => route('settings-team.list'),
+                        'active' => in_array($route, ['settings-team.list', 'settings-team.create', 'settings-team.edit']),
                         'enabled' => $user && $user->can('settings-team.manage'),
                     ],
                     [
                         'label' => 'Roles',
-                        'url' => route('role.list'),
-                        'active' => in_array($route, ['role.list', 'role.create', 'role.edit']),
+                        'url' => route('settings-role.list'),
+                        'active' => in_array($route, ['settings-role.list', 'settings-role.create', 'settings-role.edit']),
                         'enabled' => $user && $user->can('settings-role.manage'),
                     ],
                     [
                         'label' => 'Users',
-                        'url' => route('user.list'),
-                        'active' => in_array($route, ['user.list', 'user.create', 'user.edit']),
+                        'url' => route('settings-user.list'),
+                        'active' => in_array($route, ['settings-user.list', 'settings-user.create', 'settings-user.edit']),
                         'enabled' => $user && $user->can('settings-user.manage'),
                     ],
                     [
                         'label' => 'Files',
-                        'url' => route('file.list'),
-                        'active' => $route === 'file.list',
+                        'url' => route('settings-file.list'),
+                        'active' => $route === 'settings-file.list',
                     ],
                 ],
             ],

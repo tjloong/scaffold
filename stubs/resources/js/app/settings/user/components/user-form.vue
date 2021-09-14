@@ -2,12 +2,12 @@
     <form @submit.prevent="submit()">
         <box>
             <div class="p-5">
-                <field label="Name" v-model="form.name" :error="errors.name" required />
-                <field label="Login Email" type="email" v-model="form.email" :error="errors.email" required />
+                <field label="Name" v-model="form.user.name" :error="errors.name" required />
+                <field label="Login Email" type="email" v-model="form.user.email" :error="errors.email" required />
 
                 <field label="Role" 
                     type="select" 
-                    v-model="form.role_id" 
+                    v-model="form.user.role_id" 
                     :error="errors.role_id"
                     :options="roles.data.map(val => ({
                         value: val.id,
@@ -27,7 +27,7 @@
 
                 <inertia-link
                     v-else-if="user.is_pending_activate"
-                    :href="route('user.invite', { id: user.id })"
+                    :href="route('settings-user.invite', { id: user.id })"
                     method="post"
                     as="button"
                     class="text-blue-500 text-sm inline-flex items-center"
@@ -66,14 +66,14 @@ export default {
     },
     data () {
         return {
-            form: this.$inertia.form({
+            form: this.$inertia.form({ user: {
                 name: null,
                 email: null,
                 role_id: null,
                 ..._.pick(this.user, [
                     'id', 'name', 'email', 'role_id',
                 ]),
-            })
+            }})
         }
     },
     computed: {
@@ -83,7 +83,7 @@ export default {
     },
     methods: {
         submit () {
-            this.form.post(this.route('user.store'), { replace: true })
+            this.form.post(this.route('settings-user.store'))
         },
     }
 }

@@ -16,6 +16,10 @@ trait FileManager
      */
     protected static function bootFileManager()
     {
+        static::saving(function($file) {
+            $file->name = substr($file->name, 0, 200);
+        });
+
         static::deleting(function($file) {
             if ($path = $file->data->path ?? null) {
                 if (env('APP_ENV') !== 'production' && Str::startsWith($path, 'prod/')) {

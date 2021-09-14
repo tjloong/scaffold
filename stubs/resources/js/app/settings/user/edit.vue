@@ -15,7 +15,7 @@
                     { value: 'teams', label: 'Teams' },
                 ]"
                 :value="tab"
-                @input="$inertia.visit(route('user.edit', { id: user.id, tab: $event }), { replace: true })"
+                @input="$inertia.visit(route('settings-user.edit', { id: user.id, tab: $event }), { replace: true })"
             />
 
             <team-picker v-if="tab === 'teams'" @input="joinTeam">
@@ -84,7 +84,7 @@ export default {
                 title: 'Delete User',
                 message: `Are you sure to delete ${this.user.name}?`,
                 onConfirmed: () => {
-                    this.$inertia.delete(this.route('user.delete', { id: this.user.id }))
+                    this.$inertia.delete(this.route('settings-user.delete', { id: this.user.id }))
                 }
             })
         },
@@ -105,7 +105,7 @@ export default {
                         .mapValues(val => (_.head(val).pivot))
                         .value()
                 })
-                .post(this.route('user.store', { id: this.user.id }))
+                .post(this.route('settings-user.store', { id: this.user.id }))
         },
         resetAbilities () {
             this.$inertia
@@ -113,7 +113,7 @@ export default {
                     id: this.user.id,
                     abilities: [],
                 })
-                .post(this.route('user.store', { id: this.user.id }))
+                .post(this.route('settings-user.store', { id: this.user.id }))
         },
         joinTeam (team) {
             this.$inertia
@@ -121,7 +121,7 @@ export default {
                     id: this.user.id,
                     teams: _.uniq(_.map(this.user.teams, 'id').concat([team.id])),
                 })
-                .post(this.route('user.store', { id: this.user.id }))
+                .post(this.route('settings-user.store', { id: this.user.id }))
         },
         leaveTeam (team) {
             this.$inertia
@@ -129,7 +129,7 @@ export default {
                     id: this.user.id,
                     teams: _.map(this.user.teams, 'id').filter(v => (v !== team.id))
                 })
-                .post(this.route('user.store', { id: this.user.id }))
+                .post(this.route('settings-user.store', { id: this.user.id }))
         },
     }
 }

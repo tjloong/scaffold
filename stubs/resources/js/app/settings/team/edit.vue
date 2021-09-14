@@ -52,7 +52,7 @@ export default {
                 title: 'Delete Team',
                 message: `Are you sure to delete team ${this.team.name}?`,
                 onConfirmed: () => {
-                    this.$inertia.delete(this.route('team.delete', { id: this.team.id }))
+                    this.$inertia.delete(this.route('settings-team.delete', { id: this.team.id }))
                 }
             })
         },
@@ -62,7 +62,7 @@ export default {
                     id: user.id,
                     teams: _.uniq(_.map(user.teams, 'id').concat([this.team.id])),
                 })
-                .post(this.route('user.store', { id: user.id }))
+                .post(this.route('settings-user.store', { id: user.id }))
         },
         removeUser (user) {
             this.$inertia
@@ -70,7 +70,7 @@ export default {
                     id: user.id,
                     teams: _.map(user.teams, 'id').filter(v => v !== this.team.id)
                 })
-                .post(this.route('user.store', { id: user.id }))
+                .post(this.route('settings-user.store', { id: user.id }))
         }
     }
 }
