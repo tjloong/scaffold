@@ -2,8 +2,8 @@
     <form @submit.prevent="submit()">
         <box>
             <div class="p-5">
-                <field label="Team Name" v-model="form.team.name" :error="errors.name" required />
-                <field label="Description" type="textarea" v-model="form.team.description" :error="errors.description" />
+                <field label="Team Name" v-model="form.team.name" :error="errors['team.name']" required />
+                <field label="Description" type="textarea" v-model="form.team.description" :error="errors['team.description']" />
             </div>
 
             <template #buttons>
@@ -37,7 +37,12 @@ export default {
     },
     methods: {
         submit () {
-            this.form.post(this.route('settings-team.store'))
+            this.form.post(
+                this.team?.id
+                    ? this.route('team.update', { id: this.team.id })
+                    : this.route('team.create'),
+                { replace: true }
+            )
         },
     }
 }

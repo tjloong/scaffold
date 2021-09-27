@@ -11,10 +11,13 @@ class RoleController extends Controller
     /**
      * Create role
      * 
+     * @param RoleStoreRequest $request
      * @return Response
      */
-    public function create()
+    public function create(RoleStoreRequest $request)
     {
+        if ($request->isMethod('post')) return $this->store($request);
+
         $clonables = Role::fetch();
 
         return inertia('settings/role/create', [
@@ -23,14 +26,17 @@ class RoleController extends Controller
     }
 
     /**
-     * Edit role
+     * Update role
      * 
+     * @param RoleStoreRequest $request
      * @return Response
      */
-    public function edit()
+    public function update(RoleStoreRequest $request)
     {
-        $tab = request()->tab ?? 'abilities';
-        $role = Role::findOrFail(request()->id);
+        if ($request->isMethod('post')) return $this->store($request);
+
+        $tab = $request->tab ?? 'abilities';
+        $role = Role::findOrFail($request->id);
         $users = $tab === 'users' ? $role->users()->fetch() : null;
         $abilities = $tab === 'abilities' 
             ? Ability::all()->map(function($ability) use ($role) {
@@ -41,7 +47,7 @@ class RoleController extends Controller
             })
             : null;
 
-        return inertia('settings/role/edit', [
+        return inertia('settings/role/update', [
             'tab' => $tab,
             'role' => $role->toResource(),
             'abilities' => $abilities,
@@ -60,7 +66,7 @@ class RoleController extends Controller
 
         return inertia('settings/role/list', [
             'roles' => $roles,
-            'can.create' => request()->user()->can('settings-role.manage'),
+            'can.create' => request()->user()->can('role.manage'),
         ]);
     }
 
@@ -79,18 +85,18 @@ class RoleController extends Controller
         $role->fill($request->input('role'))->save();
 
         if ($request->has('role.clone_from_id') && !$request->has('id')) {
-            if ($source = Role::find($request->input('clone_from_id'))) {
+            if ($source = Role::find($request->input('role.clone_from_id'))) {
                 $role->abilities()->sync($source->abilities->pluck('id')->toArray());
             }
         }
 
         if ($request->has('role.abilities')) {
-            $role->abilities()->sync($request->input('abilities'));
+            $role->abilities()->sync($request->input('role.abilities'));
         }
 
         return $request->id
             ? back()->with('toast', 'Role Updated::success')
-            : redirect()->route('settings-role.edit', ['id' => $role->id])->with('toast', 'Role Created::success');
+            : redirect()->route('role.update', ['id' => $role->id])->with('toast', 'Role Created::success');
     }
 
     /**
@@ -106,6 +112,6 @@ class RoleController extends Controller
 
         Role::whereIn('id', explode(',', request()->id))->delete();
 
-        return redirect()->route('settings-role.list')->with('toast', 'Role Deleted');
+        return redirect()->route('role.list')->with('toast', 'Role Deleted');
     }
 }

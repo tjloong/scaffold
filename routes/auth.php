@@ -14,6 +14,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('register/completed', [AuthController::class, 'showRegisterCompleted'])->name('register.completed');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('email/resend-verification', [AuthController::class, 'resendEmailVerification'])->name('verification.resend');
 });

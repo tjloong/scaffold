@@ -33,7 +33,7 @@
             ref="uploader"
             multiple
             title="Upload Files"
-            :url="route('settings-file.upload')"
+            :url="route('file.upload')"
             :accept="['image', 'pdf', 'youtube']"
         />
 
@@ -72,7 +72,7 @@ export default {
                 message: 'Are you sure to delete the selected files?',
                 onConfirmed: () => {
                     this.deleting = true
-                    this.$inertia.delete(this.route('settings-file.delete', { id: _.map(this.checked, 'id').join(',') }), {
+                    this.$inertia.delete(this.route('file.delete', { id: _.map(this.checked, 'id').join(',') }), {
                         onSuccess: () => {
                             this.deleting = false
                             this.checked = []

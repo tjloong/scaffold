@@ -3,11 +3,13 @@
         <template #navbar-right>
             <dropdown>
                 <div class="flex items-center justify-center font-medium h-12">
-                    <icon name="user-circle" /> {{ $user.name }} <icon name="chevron-down" />
+                    <icon name="user-circle" /> 
+                    {{ $auth.user.name | truncate(15) }} 
+                    <icon name="chevron-down" />
                 </div>
 
                 <template #items>
-                    <inertia-link :href="route('settings-user.account')">
+                    <inertia-link :href="route('user.account')">
                         <icon name="user-circle" /> My Account
                     </inertia-link>
 

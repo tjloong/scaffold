@@ -18,7 +18,7 @@ class TeamStoreRequest extends FormRequest
             'team.name' => [
                 'sometimes',
                 'required',
-                Rule::unique('teams', 'name')->ignore(request()->input('id')),
+                Rule::unique('teams', 'name')->ignore(request()->input('team.id')),
             ],
         ];
     }

@@ -7,7 +7,7 @@
         <async-picker 
             ref="picker" 
             :placeholder="placeholder" 
-            :url="route('settings-team.list')" 
+            :url="route('team.list')" 
             @input="$emit('input', $event)" 
         />
     </div>

@@ -3,11 +3,13 @@
 namespace Jiannius\Scaffold;
 
 use App\Models\Ability;
+use Illuminate\Routing\Router;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Jiannius\Scaffold\Middleware\IsRole;
 use Jiannius\Scaffold\Middleware\TrackRef;
 use Jiannius\Scaffold\Middleware\SetLocale;
 use Jiannius\Scaffold\Console\InstallCommand;
@@ -86,6 +88,9 @@ class ScaffoldServiceProvider extends ServiceProvider
         $kernel->appendMiddlewareToGroup('web', TrackRef::class);
         $kernel->appendMiddlewareToGroup('web', SetLocale::class);
         $kernel->appendMiddlewareToGroup('web', HandleInertiaRequests::class);
+
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('is', IsRole::class);
     }
 
     /**

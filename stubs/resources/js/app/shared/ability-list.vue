@@ -53,27 +53,23 @@ export default {
     },
     computed: {
         groups () {
-            const groups = ['Modules', 'Settings']
-            const abilities = _.chain(this.abilities)
-                .groupBy('module')
-                .map((val, key) => ({ name: key, abilities: val }))
-                .value()
-
-            return groups.map(group => {
-                return {
-                    name: group,
-                    mods: abilities
-                        .filter(ability => {
-                            if (group === 'Settings') return ability.name.startsWith('settings')
-                            else if (group === 'Modules') return !ability.name.startsWith('settings')
-                        })
-                        .map(ability => {
-                            if (ability.name.startsWith('settings')) ability.name = ability.name.replace('settings-', '')
-
-                            return ability
-                        })
+            const groups = [
+                {
+                    name: 'Settings',
+                    abilities: this.abilities
+                        .filter(val => ([
+                            'team', 'role', 'user',
+                        ].includes(val.module))),
                 }
-            }).filter(group => (group.mods.length > 0))
+            ]
+
+            return groups.map(group => ({
+                name: group.name,
+                mods: _.chain(group.abilities)
+                    .groupBy('module')
+                    .map((val, key) => ({ name: key, abilities: val }))
+                    .value()
+            }))
         },
     },
 }

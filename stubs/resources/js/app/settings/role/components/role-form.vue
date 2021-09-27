@@ -14,7 +14,7 @@
 
         <box v-else>
             <div class="p-5">
-                <field label="Role Name" v-model="form.role.name" :error="errors.name" required />
+                <field label="Role Name" v-model="form.role.name" :error="errors['role.name']" required />
 
                 <field 
                     v-if="!form.role.id"
@@ -76,7 +76,12 @@ export default {
     },
     methods: {
         submit () {
-            this.form.post(this.route('settings-role.store'))
+            this.form.post(
+                this.role?.id
+                    ? this.route('role.update', { id: this.role.id })
+                    : this.route('role.create'),
+                { replace: true }
+            )
         },
     }
 }

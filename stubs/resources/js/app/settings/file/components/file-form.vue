@@ -74,7 +74,7 @@ export default {
         },
         submit () {
             this.form = this.$inertia.form({ file: _.pick(this.file, ['id', 'name', 'data']) })
-            this.form.post(this.route('settings-file.store', { id: this.file.id }), {
+            this.form.post(this.route('file.store', { id: this.file.id }), {
                 onSuccess: () => this.close()
             })
         }

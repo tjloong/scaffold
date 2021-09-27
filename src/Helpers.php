@@ -7,18 +7,18 @@ use Carbon\Carbon;
  */
 function app_version()
 {
-	$path = base_path('.git/refs/tags');
-	$version = '1.0.0';
+    $path = base_path('.git/refs/tags');
+    $version = '1.0.0';
 
-	if (is_dir($path)) {
-		$files = collect(scandir($path))->filter(function($file) {
-			return !in_array($file, ['.', '..']);
-		});
+    if (is_dir($path)) {
+        $files = collect(scandir($path))->filter(function($file) {
+            return !in_array($file, ['.', '..']);
+        });
 
-		if ($files->last()) $version = $files->last();
-	}
+        if ($files->last()) $version = $files->last();
+    }
 
-	return $version;
+    return $version;
 }
 
 /**
@@ -26,10 +26,10 @@ function app_version()
  */
 function locale_url($url)
 {
-	$locale = app()->currentLocale();
+    $locale = app()->currentLocale();
 
-	if ($locale === 'en') return $url;
-	else return '/' . $locale . str_replace($locale, '', $url);
+    if ($locale === 'en') return $url;
+    else return '/' . $locale . str_replace($locale, '', $url);
 }
 
 /**
@@ -39,13 +39,13 @@ function locale_url($url)
  */
 function currency($num, $symbol = null, $bracket = true)
 {
-	$num = (float)$num ?: 0;
-	$currency = number_format($num, 2);
+    $num = (float)$num ?: 0;
+    $currency = number_format($num, 2);
 
-	if ($symbol) $currency = "$symbol $currency";
-	if ($bracket && $num < 0) $currency = '(' . str_replace('-', '', $currency) . ')';
+    if ($symbol) $currency = "$symbol $currency";
+    if ($bracket && $num < 0) $currency = '(' . str_replace('-', '', $currency) . ')';
 
-	return $currency;
+    return $currency;
 }
 
 /**
@@ -54,99 +54,33 @@ function currency($num, $symbol = null, $bracket = true)
  * @param string $str
  * @return object
  */
-function date_range($str, $strict = false)
+function date_range($from = null, $to = null, $tz = 'UTC')
 {
-	$from = null;
-	$to = null;
-	$today = Carbon::today();
+    if (!$from instanceof Carbon) {
+        $from = $from
+            ? Carbon::parse($from)->startOfDay()
+            : Carbon::parse('1950-01-01 00:00:00');
+    }
 
-	// custom from and to
-	if (is_array($str) && (isset($str['from']) || isset($str['to']))) {
-		$from = Carbon::parse($str['from']);
-		$to = Carbon::parse($str['to']);
-	}
-	// string form
-	else if (is_string($str)) {
-		// today
-		if (strtolower($str) == 'today') {
-			$from = $today;
-			$to = $today;
-		}
-		// this fiscal year
-		elseif (strtolower($str) === 'this fiscal') {
-			$from = tenant()->fiscal_start;
-			$to = tenant()->fiscal_end;
-		}
-		// last fiscal year
-		elseif (strtolower($str) === 'last fiscal') {
-			$from = tenant()->fiscal_start->subYear();
-			$to = tenant()->fiscal_end->subYear();
-		}
-		// this year
-		elseif (strtolower($str) == 'this year') {
-			$from = Carbon::parse('first day of January');
-			$to = Carbon::parse('last day of December');
-		}
-		// last year
-		elseif (strtolower($str) == 'last year') {
-			$from = Carbon::parse('first day of January ' . (date('Y') - 1));
-			$to = Carbon::parse('last day of December ' . (date('Y') - 1));
-		}
-		// day range
-		elseif (strpos(strtolower($str), 'days')) {
-			$n = (integer)trim(str_replace('days', '', strtolower($str)));
-			$from = $today->copy()->subDays($n - 1);
-			$to = $today->copy();
-		}
-		// month range
-		elseif (strpos(strtolower($str), 'months')) {
-			$n = (integer)trim(str_replace('months', '', strtolower($str)));
-			$sub = $today->copy()->subMonths($n - 1);
+    if (!$to instanceof Carbon) {
+        $to = $to
+            ? Carbon::parse($to)->endOfDay()
+            : Carbon::today()->endOfDay();
+    }
 
-			if ($strict) {
-				$from = $sub;
-				$to = $today->copy();
-			}
-			else {
-				$from = Carbon::parse(implode('-', [$sub->year, $sub->month, '01']));
-				$to = Carbon::parse(implode('-', [$today->year, $today->month, $today->daysInMonth]));
-			}
-		}
-		// year range
-		elseif (strpos(strtolower($str), 'years')) {
-			$n = (integer)trim(str_replace('years', '', strtolower($str)));
-			$sub = $today->copy()->subYears($n - 1);
-
-			if ($strict) {
-				$from = $sub;
-				$to = $today->copy();
-			}
-			else {
-				$from = Carbon::parse(implode('-', [$sub->year, '01', '01']));
-				$to = Carbon::parse(implode('-', [$today->year, '12', '31']));
-			}
-		}
-		// custom range
-		elseif (strpos(strtolower($str), ' to ')) {
-			$split = explode(' to ', strtolower($str));
-			$from = Carbon::parse(trim($split[0]));
-			$to = Carbon::parse(trim($split[1]));
-		}
-		else {
-			$from = Carbon::parse(strtolower($str));
-			$to = Carbon::parse(strtolower($str));
-		}
-	}
-	else return $str;
-
-	return (object)[
-		'from' => $from->copy()->toDateString(),
-		'to' => $to->copy()->toDateString(),
-		'from_dt' => $from->copy()->toDatetimeString(),
-		'to_dt' => $to->copy()->toDatetimeString(),
-		'diffInDays' => $from->copy()->diffInDays($to),
-		'diffInMonths' => $from->copy()->diffInMonths($to->copy()->endOfMonth()),
-		'diffInYears' => $from->copy()->diffInYears($to->copy()->endOfYear()),
-		'string' => $str,
-	];
+    return (object)[
+        'from' => (object)[
+            'date' => $from->copy()->setTimeZone($tz)->toDateString(),
+            'datetime' => $from->copy()->setTimeZone($tz)->toDatetimeString(),
+            'carbon' => $from->copy()->setTimezone($tz),
+        ],
+        'to' => (object)[
+            'date' => $to->copy()->setTimeZone($tz)->toDateString(),
+            'datetime' => $to->copy()->setTimeZone($tz)->toDatetimeString(),
+            'carbon' => $to->copy()->setTimezone($tz),
+        ],
+        'diffInDays' => $from->copy()->diffInDays($to),
+        'diffInMonths' => $from->copy()->diffInMonths($to->copy()->endOfMonth()),
+        'diffInYears' => $from->copy()->diffInYears($to->copy()->endOfYear()),
+    ];
 }

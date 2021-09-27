@@ -20,7 +20,7 @@
                     { value: 'users', label: 'Users' },
                 ]"
                 :value="tab"
-                @input="$inertia.visit(route('settings-role.edit', { id: role.id, tab: $event }), { replace: true })"
+                @input="$inertia.visit(route('role.update', { id: role.id, tab: $event }), { replace: true })"
             />
 
             <btn v-if="tab === 'users'" inverted @click="$refs.userPicker.open()">
@@ -42,7 +42,7 @@
 
         <template v-if="tab === 'users'">
             <user-list :users="users" />
-            <async-picker ref="userPicker" placeholder="Assign User" :url="route('settings-user.list')" @input="assignUser" />
+            <async-picker ref="userPicker" placeholder="Assign User" :url="route('user.list')" @input="assignUser" />
         </template>
 
     </div>
@@ -55,7 +55,7 @@ import AbilityList from '@/app/shared/ability-list'
 import AbilityForm from '@/app/shared/ability-form'
 
 export default {
-    name: 'RoleEdit',
+    name: 'RoleUpdate',
     props: {
         tab: String,
         role: Object,
@@ -69,14 +69,14 @@ export default {
         AbilityList,
         AbilityForm,
     },
-    metaInfo: { title: 'Edit Role' },
+    metaInfo: { title: 'Update Role' },
     methods: {
         destroy () {
             this.$confirm({
                 title: 'Delete Role',
                 message: `Are you sure to delete role ${this.role.name}?`,
                 onConfirmed: () => {
-                    this.$inertia.delete(this.route('settings-role.delete', { id: this.role.id }))
+                    this.$inertia.delete(this.route('role.delete', { id: this.role.id }))
                 }
             })
         },
@@ -86,19 +86,19 @@ export default {
             })
 
             this.$inertia
-                .form({
+                .form({ role: {
                     id: this.role.id,
                     abilities: _.map(abilities.filter(val => (val.enabled)), 'id'),
-                })
-                .post(this.route('settings-role.store', { id: this.role.id }))
+                }})
+                .post(this.route('role.store', { id: this.role.id }))
         },
         assignUser (user) {
             this.$inertia
-                .form({
+                .form({ user: {
                     id: user.id,
                     role_id: this.role.id,
-                })
-                .post(this.route('settings-user.store', { id: user.id }))
+                }})
+                .post(this.route('user.store', { id: user.id }))
         },
     }
 }

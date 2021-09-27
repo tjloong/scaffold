@@ -12,25 +12,31 @@ class TeamController extends Controller
     /**
      * Create team
      * 
+     * @param TeamStoreRequest $request
      * @return Response
      */
-    public function create()
+    public function create(TeamStoreRequest $request)
     {
+        if ($request->isMethod('post')) return $this->store($request);
+
         return inertia('settings/team/create');
     }
 
     /**
-     * Edit team
+     * Update team
      * 
+     * @param TeamStoreRequest $request
      * @return Response
      */
-    public function edit()
+    public function update(TeamStoreRequest $request)
     {
-        $tab = request()->tab ?? 'users';
-        $team = Team::findOrFail(request()->id);
+        if ($request->isMethod('post')) return $this->store($request);
+
+        $tab = $request->tab ?? 'users';
+        $team = Team::findOrFail($request->id);
         $users = User::teamId($team->id)->fetch();
 
-        return inertia('settings/team/edit', [
+        return inertia('settings/team/update', [
             'tab' => $tab,
             'team' => $team->toResource(),
             'users' => $users,
@@ -46,11 +52,11 @@ class TeamController extends Controller
     {
         $teams = Team::fetch();
 
-        if (request()->isMethod('post')) return back()->with('options', $teams);
+        if (request()->isMethod('post')) return back()->with('session', $teams);
 
         return inertia('settings/team/list', [
             'teams' => $teams,
-            'can.create' => request()->user()->can('settings-team.manage'),
+            'can.create' => request()->user()->can('team.manage'),
         ]);
     }
 
@@ -60,7 +66,7 @@ class TeamController extends Controller
      * @param TeamStoreRequest $request
      * @return TeamResource
      */
-    public function store(TeamStoreRequest $request)
+    public function store($request)
     {
         $request->validated();
 
@@ -70,7 +76,7 @@ class TeamController extends Controller
 
         return $request->id
             ? back()->with('toast', 'Team Updated::success')
-            : redirect()->route('settings-team.edit', ['id' => $team->id])->with('toast', 'Team Created::success');
+            : redirect()->route('team.update', ['id' => $team->id])->with('toast', 'Team Created::success');
     }
 
     /**
@@ -86,6 +92,6 @@ class TeamController extends Controller
 
         Team::whereIn('id', explode(',', request()->id))->delete();
 
-        return redirect()->route('settings-team.list')->with('toast', 'Team Deleted');
+        return redirect()->route('team.list')->with('toast', 'Team Deleted');
     }
 }

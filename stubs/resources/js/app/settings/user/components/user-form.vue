@@ -2,13 +2,13 @@
     <form @submit.prevent="submit()">
         <box>
             <div class="p-5">
-                <field label="Name" v-model="form.user.name" :error="errors.name" required />
-                <field label="Login Email" type="email" v-model="form.user.email" :error="errors.email" required />
+                <field label="Name" v-model="form.user.name" :error="errors['user.name']" required />
+                <field label="Login Email" type="email" v-model="form.user.email" :error="errors['user.email']" required />
 
                 <field label="Role" 
                     type="select" 
                     v-model="form.user.role_id" 
-                    :error="errors.role_id"
+                    :error="errors['user.role_id']"
                     :options="roles.data.map(val => ({
                         value: val.id,
                         label: val.name,
@@ -27,7 +27,7 @@
 
                 <inertia-link
                     v-else-if="user.is_pending_activate"
-                    :href="route('settings-user.invite', { id: user.id })"
+                    :href="route('user.invite', { id: user.id })"
                     method="post"
                     as="button"
                     class="text-blue-500 text-sm inline-flex items-center"
@@ -83,7 +83,12 @@ export default {
     },
     methods: {
         submit () {
-            this.form.post(this.route('settings-user.store'))
+            this.form.post(
+                this.user?.id
+                    ? this.route('user.update', { id: this.user.id })
+                    : this.route('user.create'),
+                { replace: true }
+            )
         },
     }
 }

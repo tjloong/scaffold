@@ -16,7 +16,7 @@ class FileController extends Controller
     {
         $files = File::fetch();
 
-        if (request()->isMethod('post')) return back()->with('options', $files);
+        if (request()->isMethod('post')) return back()->with('session', $files);
 
         return inertia('settings/file/list', [
             'files' => $files,
@@ -32,7 +32,7 @@ class FileController extends Controller
     {
         $files = File::upload();
 
-        return back()->with('options', $files);
+        return back()->with('session', $files);
     }
 
     /**
@@ -63,6 +63,6 @@ class FileController extends Controller
             $file->delete();
         });
 
-        return redirect()->route('settings-file.list')->with('toast', 'Files Deleted');
+        return redirect(request()->redirect ?? route('file.list'))->with('toast', 'Files Deleted');
     }
 }

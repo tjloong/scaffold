@@ -19,7 +19,7 @@ class UserStoreRequest extends FormRequest
             'user.email' => [
                 'sometimes',
                 'required',
-                Rule::unique('users', 'email')->ignore($this->input('id')),
+                Rule::unique('users', 'email')->ignore($this->input('user.id')),
             ],
             'user.role_id' => 'sometimes|required',
         ];

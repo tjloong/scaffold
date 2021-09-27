@@ -32,72 +32,66 @@ trait Model
     }
 
     /**
-     * Scope for fetching the query builder
-     *
-     * @param Builder $query
-     * @param boolean $filterFromQuery
-     * @param boolean $returnBuilder
-     * @return Collection
+     * Scope for filter from query string
+     * 
+     * @param Buildr $query
+     * @return Builder
      */
-    public function scopeFetch($query, $filterFromQuery = true, $returnBuilder = false)
+    public function scopeFilterFromQuery($query)
     {
-        if ($filterFromQuery) {
-            $filters = $this->getFiltersFromQuery();
-            $query->filter($filters);
-        }
+        $query->filter($this->getFiltersFromQuery());
 
-        $limit = request()->limit ?: 30;
-        $orders = request()->order_by ?: null;
-        $resource = $this->getJsonResource();
-        $paginate = true;
-
-        if ($disablePaginate = isset($this->paginate) && $this->paginate === false) {
-            $paginate = false;
-        }
-
-        if ($orders) {
-            foreach (explode(',', $orders) as $order) {
+        if (request()->order_by) {
+            foreach (explode(',', request()->order_by) as $order) {
                 $split = explode('__', $order);
-                $col = $split[0];
-                $by = $split[1];
-
-                $query->orderBy($col, $by);
+                $query->orderBy($split[0], $split[1]);
+            }
+        }
+        else if (isset($this->orderby)) {
+            foreach ($this->orderby as $key => $val) {
+                $query->orderBy($key, $val);
             }
         }
 
-        if ($returnBuilder) return $query;
-        else {
-            $collection = $paginate
-                ? $resource->collection($query->paginate($limit))
-                : $resource->collection($query->get());
-    
-            return isset($filters)
-                ? $collection->additional(['meta' => ['filters' => $filters]])
-                : $collection;
-        }
+        return $query;
+    }
+
+    /**
+     * Scope for fetching the api resource from query builder
+     *
+     * @param Builder $query
+     * @return Collection
+     */
+    public function scopeFetch($query)
+    {
+        $query->filterFromQuery();
+
+        $limit = request()->limit ?? $this->paginate ?? 30;
+        $orderby = request()->order_by ?? $this->orderby ?? null;
+        $resource = $this->getJsonResource();
+        $filters = $this->getFiltersFromQuery();
+
+        $collection = !isset($this->paginate) || $this->paginate === false
+            ? $resource->collection($query->paginate(request()->limit ?? $this->paginate ?? 30))
+            : $resource->collection($query->get());
+
+        return $collection->additional(['meta' => ['filters' => $filters]]);
     }
 
     /**
      * Scope for date range
      *
      * @param Builder $query
-     * @param object $range
+     * @param string $from
+     * @param string $to
      * @param string $column
      * @return Builder
      */
-    public function scopeDateRange($query, $range, $column = 'date')
+    public function scopeDateRange($query, $from = null, $to = null, $column = 'date')
     {
-        if ($range) {
-            if (is_string($range)) $range = date_range($range);
-            if (is_array($range)) $range = (object)$range;
-
-            $from = $range->from ?? null;
-            $to = $range->to ?? null;
-
-            if ($from && !$to) return $query->whereRaw("date($column) >= '$from'");
-            if (!$from && $to) return $query->whereRaw("date($column) <= '$to'");
-            if ($from && $to) return $query->whereRaw("date($column) >= '$from' and date($column) <= '$to'");
-        }
+        if ($from && !$to) return $query->whereRaw("$column >= '$from'");
+        if (!$from && $to) return $query->whereRaw("$column <= '$to'");
+        if ($from && $to) return $query->whereRaw("$column between '$from' and '$to'");
     }
 
     /**
@@ -121,7 +115,18 @@ trait Model
     public function isDateColumn($column)
     {
         return $this->hasColumn($column)
-            && in_array(Schema::getColumnType($this->getTable(), $column), ['date', 'datetime', 'timestamp']);
+            && Schema::getColumnType($this->getTable(), $column) === 'date';
+    }
+
+    /**
+     * Check model column is a datetime type
+     * 
+     * @return boolean
+     */
+    public function isDatetimeColumn($column)
+    {
+        return $this->hasColumn($column)
+            && in_array(Schema::getColumnType($this->getTable(), $column), ['datetime', 'timestamp']);
     }
 
     /**
@@ -147,7 +152,7 @@ trait Model
                 array_push($filters, ['column' => $column, 'value' => $value, 'scope' => $fn]);
             }
             else {
-                if ($this->isDateColumn($column)) {
+                if ($this->isDateColumn($column) || $this->isDatetimeColumn($column)) {
                     if (Str::endsWith($key, '_from')) array_push($filters, ['column' => $column, 'value' => $value, 'operator' => '>=']);
                     if (Str::endsWith($key, '_to')) array_push($filters, ['column' => $column, 'value' => $value, 'operator' => '<=']);
                 }

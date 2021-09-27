@@ -128,9 +128,9 @@ class CreateScaffoldTable extends Migration
             });
 
             $abilities = [
-                ['module' => 'settings-user', 'name' => 'manage'],
-                ['module' => 'settings-role', 'name' => 'manage'],
-                ['module' => 'settings-team', 'name' => 'manage'],
+                ['module' => 'user', 'name' => 'manage'],
+                ['module' => 'role', 'name' => 'manage'],
+                ['module' => 'team', 'name' => 'manage'],
             ];
 
             $restrictedUser = DB::table('roles')->where('name', 'Restricted User')->first();

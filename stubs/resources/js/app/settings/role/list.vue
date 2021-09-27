@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
-        <page-header v-if="route().current() === 'settings-role.list'" title="Roles">
-            <btn v-if="can.create" :href="route('settings-role.create')">
+        <page-header v-if="route().current() === 'role.list'" title="Roles">
+            <btn v-if="can.create" :href="route('role.create')">
                 New Role
             </btn>
         </page-header>
@@ -28,7 +28,7 @@ export default {
                 {
                     key: 'name',
                     sort: 'name',
-                    link: (role) => (role.can.edit && this.route('settings-role.edit', { id: role.id })),
+                    link: (role) => (role.can.update && this.route('role.update', { id: role.id })),
                 },
                 {
                     key: 'access',

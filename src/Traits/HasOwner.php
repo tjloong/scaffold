@@ -25,9 +25,23 @@ trait HasOwner
             $model->owned_by = $model->owned_by ?? request()->user()->id;
         });
 
-        static::addGlobalScope('owner', function (Builder $query) {
+        static::addGlobalScope('owner', function ($query) {
             $query->accessibleByUser();
         });
+    }
+
+    /**
+     * Initialize the trait
+     * 
+     * @return void
+     */
+    protected function initializeHasOwner()
+    {
+        $this->fillable[] = 'owned_by';
+        $this->fillable[] = 'created_by';
+        
+        $this->casts['owned_by'] = 'integer';
+        $this->casts['created_by'] = 'integer';
     }
 
     /**
@@ -55,11 +69,11 @@ trait HasOwner
     public function scopeAccessibleByUser($query)
     {
         $user = request()->user();
-    
+
         if (!$user) abort(401);
         if (!$user->hasColumn('role_id')) return $query;
         if ($user->is('root')) return $query;
-        
+
         $access = $user->role->access ?? null;
         if (!$access) abort(401);
 
@@ -71,15 +85,10 @@ trait HasOwner
         }
         else if ($access === 'team') {
             if (in_array('HasTeam', class_uses_recursive($user))) {
-                return $query->whereHas('owner', function($q) use ($user) {
-                    $q->whereHas('teams', function($q) use ($user) {
-                        $q->whereIn('teams.id', $user->teams->pluck('id')->toArray());
-                    });
-                });
+                return $query->ownerTeamId($user->teams->pluck('id')->toArray());
             }
         }
     }
-
 
     /**
      * Scope for owner with team id

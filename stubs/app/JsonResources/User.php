@@ -2,28 +2,22 @@
 
 namespace App\JsonResources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
 class User extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Get the resource
      *
-     * @param  \Illuminate\Http\Request
      * @return array
      */
-    public function toArray($request)
+    public function getResource($request)
     {
         return [
-            'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
             'role_id' => $this->role_id,
             'is_admin' => $this->is('admin'),
             'is_pending_activate' => $this->is_pending_activate,
             'email_verified_at' => $this->email_verified_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
 
             // relationships
             'role' => new Role($this->role),
@@ -32,8 +26,8 @@ class User extends JsonResource
 
             // permissions
             'can' => [
-                'edit' => request()->user()->can('settings-user.manage'),
-                'delete' => request()->user()->can('settings-user.manage')
+                'update' => request()->user()->can('user.manage'),
+                'delete' => request()->user()->can('user.manage')
                     && $this->id !== request()->user()->id,
             ],
         ];

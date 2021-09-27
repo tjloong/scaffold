@@ -33,7 +33,7 @@ import TeamForm from './components/team-form'
 import UserPicker from '@/app/settings/user/components/user-picker'
 
 export default {
-    name: 'TeamEdit',
+    name: 'TeamUpdate',
     props: {
         tab: String,
         team: Object,
@@ -45,32 +45,32 @@ export default {
         TeamForm,
         UserPicker,
     },
-    metaInfo: { title: 'Edit Team' },
+    metaInfo: { title: 'Update Team' },
     methods: {
         destroy () {
             this.$confirm({
                 title: 'Delete Team',
                 message: `Are you sure to delete team ${this.team.name}?`,
                 onConfirmed: () => {
-                    this.$inertia.delete(this.route('settings-team.delete', { id: this.team.id }))
+                    this.$inertia.delete(this.route('team.delete', { id: this.team.id }))
                 }
             })
         },
         assignUser (user) {
             this.$inertia
-                .form({
+                .form({ user: {
                     id: user.id,
                     teams: _.uniq(_.map(user.teams, 'id').concat([this.team.id])),
-                })
-                .post(this.route('settings-user.store', { id: user.id }))
+                }})
+                .post(this.route('user.store', { id: user.id }))
         },
         removeUser (user) {
             this.$inertia
-                .form({
+                .form({ user: {
                     id: user.id,
                     teams: _.map(user.teams, 'id').filter(v => v !== this.team.id)
-                })
-                .post(this.route('settings-user.store', { id: user.id }))
+                }})
+                .post(this.route('user.store', { id: user.id }))
         }
     }
 }

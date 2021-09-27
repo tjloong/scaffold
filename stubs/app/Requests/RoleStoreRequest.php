@@ -18,7 +18,7 @@ class RoleStoreRequest extends FormRequest
             'role.name' => [
                 'sometimes',
                 'required',
-                Rule::unique('roles', 'name')->ignore(request()->input('id')),
+                Rule::unique('roles', 'name')->ignore(request()->input('role.id')),
             ],
         ];
     }

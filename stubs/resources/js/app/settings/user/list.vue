@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-lg mx-auto">
-        <page-header v-if="route().current() === 'settings-user.list'" title="Users">
-            <btn v-if="can.create" :href="route('settings-user.create')">
+        <page-header v-if="route().current() === 'user.list'" title="Users">
+            <btn v-if="can.create" :href="route('user.create')">
                 New User
             </btn>
         </page-header>
@@ -28,7 +28,7 @@ export default {
                 {
                     key: 'name',
                     sort: 'name',
-                    link: (user) => (user.can.edit && this.route('settings-user.edit', { id: user.id })),
+                    link: (user) => (user.can.update && this.route('user.update', { id: user.id })),
                     small: (user) => (user.email),
                 },
                 {
@@ -36,7 +36,7 @@ export default {
                     label: 'Role',
                     align: 'right',
                 },
-                this.route().current() === 'team.edit' && {
+                this.route().current() === 'team.update' && {
                     key: 'actions',
                     actions: (user) => ([
                         {

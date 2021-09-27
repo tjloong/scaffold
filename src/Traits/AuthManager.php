@@ -44,6 +44,11 @@ trait AuthManager
         ]);
     }
 
+    public function showRegisterCompleted()
+    {
+        return Inertia::render('auth/register-completed');
+    }
+
     /**
      * Show forgot password page
      * 
@@ -125,7 +130,7 @@ trait AuthManager
             Auth::login($user);
             Cookie::expire('_ref');
 
-            return $this->registered($user) ?? redirect(RouteServiceProvider::HOME);
+            return $this->registered($user) ?? redirect()->route('register.completed');
         }
     }
 

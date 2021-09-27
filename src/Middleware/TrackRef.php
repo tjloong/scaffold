@@ -34,7 +34,7 @@ class TrackRef
                 }
                 // if visit to register page with no ref and no ref cookie, 
                 // redirect to avoid bot signup
-                else if (!$ref && $request->is('register/*')) {
+                else if (!$ref && !$request->is('register/completed') && $request->is('register/*')) {
                     return redirect('/');
                 }
             }

@@ -17,61 +17,54 @@ Route::prefix('app')->middleware('auth')->group(function () {
     Route::inertia('/', 'dashboard')->name('dashboard');
 
     /**
-     * Settings
+     * Team
      */
-    Route::prefix('settings')->group(function () {
-        /**
-         * User settings
-         */
-        Route::prefix('user')->group(function () {
-            Route::match(['get', 'post'], 'account', [UserController::class, 'account'])->name('settings-user.account');
-            Route::post('list', [UserController::class, 'list'])->name('settings-user.list');
-    
-            Route::middleware('can:settings-user.manage')->group(function () {
-                Route::get('list', [UserController::class, 'list'])->name('settings-user.list');
-                Route::get('create', [UserController::class, 'create'])->name('settings-user.create');
-                Route::get('edit/{id}', [UserController::class, 'edit'])->name('settings-user.edit');
-                Route::post('invite/{id}', [UserController::class, 'invite'])->name('settings-user.invite');
-                Route::post('store/{id?}', [UserController::class, 'store'])->name('settings-user.store');
-                Route::delete('/', [UserController::class, 'delete'])->name('settings-user.delete');
-            });
-        });
-    
-        /**
-         * Role settings
-         */
-        Route::prefix('role')->middleware('can:settings-role.manage')->group(function () {
-            Route::get('list', [RoleController::class, 'list'])->name('settings-role.list');
-            Route::get('create', [RoleController::class, 'create'])->name('settings-role.create');
-            Route::get('edit/{id}/{tab?}', [RoleController::class, 'edit'])->name('settings-role.edit');
-            Route::post('store/{id?}', [RoleController::class, 'store'])->name('settings-role.store');
-            Route::delete('/', [RoleController::class, 'delete'])->name('settings-role.delete');
-        });
-    
-        /**
-         * Team settings
-         */
-        Route::prefix('team')->group(function () {
-            Route::post('list', [TeamController::class, 'list'])->name('settings-team.list');
-    
-            Route::middleware('can:settings-team.manage')->group(function () {
-                Route::get('list', [TeamController::class, 'list'])->name('settings-team.list');
-                Route::get('create', [TeamController::class, 'create'])->name('settings-team.create');
-                Route::get('edit/{id}', [TeamController::class, 'edit'])->name('settings-team.edit');
-                Route::post('store/{id?}', [TeamController::class, 'store'])->name('settings-team.store');
-                Route::delete('/', [TeamController::class, 'delete'])->name('settings-team.delete');
-            });
-        });
+    Route::prefix('team')->group(function () {
+        Route::post('list', [TeamController::class, 'list'])->name('team.list');
 
-        /**
-         * File settings
-         */
-        Route::prefix('file')->group(function () {
-            Route::match(['get', 'post'], 'list', [FileController::class, 'list'])->name('settings-file.list');
-            Route::post('upload', [FileController::class, 'upload'])->name('settings-file.upload');
-            Route::post('store/{id}', [FileController::class, 'store'])->name('settings-file.store');
-            Route::delete('/', [FileController::class, 'delete'])->name('settings-file.delete');
+        Route::middleware('can:team.manage')->group(function () {
+            Route::get('list', [TeamController::class, 'list'])->name('team.list');
+            Route::match(['get', 'post'], 'create', [TeamController::class, 'create'])->name('team.create');
+            Route::match(['get', 'post'], 'update/{id}', [TeamController::class, 'update'])->name('team.update');
+            Route::delete('/', [TeamController::class, 'delete'])->name('team.delete');
         });
+    });
+
+    /**
+     * Role
+     */
+    Route::prefix('role')->middleware('can:role.manage')->group(function () {
+        Route::get('list', [RoleController::class, 'list'])->name('role.list');
+        Route::match(['get', 'post'], 'create', [RoleController::class, 'create'])->name('role.create');
+        Route::match(['get', 'post'], 'update/{id}/{tab?}', [RoleController::class, 'update'])->name('role.update');
+        Route::delete('/', [RoleController::class, 'delete'])->name('role.delete');
+    });
+
+    /**
+     * User
+     */
+    Route::prefix('user')->group(function () {
+        Route::match(['get', 'post'], 'account', [UserController::class, 'account'])->name('user.account');
+        Route::post('list', [UserController::class, 'list'])->name('user.list');
+
+        Route::middleware('can:user.manage')->group(function () {
+            Route::get('list', [UserController::class, 'list'])->name('user.list');
+            Route::match(['get', 'post'], 'create', [UserController::class, 'create'])->name('user.create');
+            Route::match(['get', 'post'], 'update/{id}', [UserController::class, 'update'])->name('user.update');
+            Route::post('invite/{id}', [UserController::class, 'invite'])->name('user.invite');
+            Route::delete('/', [UserController::class, 'delete'])->name('user.delete');
+        });
+    });
+
+    
+    /**
+     * File
+     */
+    Route::prefix('file')->group(function () {
+        Route::match(['get', 'post'], 'list', [FileController::class, 'list'])->name('file.list');
+        Route::post('upload', [FileController::class, 'upload'])->name('file.upload');
+        Route::post('store/{id}', [FileController::class, 'store'])->name('file.store');
+        Route::delete('/', [FileController::class, 'delete'])->name('file.delete');
     });
 });
 

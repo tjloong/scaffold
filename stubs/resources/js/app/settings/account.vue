@@ -44,7 +44,7 @@ export default {
                     if (!data.password) delete data.password
                     return data
                 })
-                .post(this.route('settings-user.account'), {
+                .post(this.route('user.account'), {
                     onSuccess: () => this.$toast('Account Updated', 'success')
                 })
         }

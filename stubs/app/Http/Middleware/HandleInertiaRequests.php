@@ -45,7 +45,7 @@ class HandleInertiaRequests extends Middleware
             'flash' => $this->getFlash($request),
             'toast' => $this->getToast($request),
             'alert' => $this->getAlert($request),
-            'options' => $request->session()->get('options'),
+            'session' => $request->session()->get('session'),
             'auth.perm' => $this->getPermissions($request),
             'auth.user' => $request->user()
                 ? $request->user()->toResource()
@@ -156,31 +156,31 @@ class HandleInertiaRequests extends Middleware
                 'dropdown' => [
                     [
                         'label' => 'My Account',
-                        'url' => route('settings-user.account'),
-                        'active' => $route === 'settings-user.account',
+                        'url' => route('user.account'),
+                        'active' => $route === 'user.account',
                     ],
                     [
                         'label' => 'Teams',
-                        'url' => route('settings-team.list'),
-                        'active' => in_array($route, ['settings-team.list', 'settings-team.create', 'settings-team.edit']),
-                        'enabled' => $user && $user->can('settings-team.manage'),
+                        'url' => route('team.list'),
+                        'active' => in_array($route, ['team.list', 'team.create', 'team.update']),
+                        'enabled' => $user && $user->can('team.manage'),
                     ],
                     [
                         'label' => 'Roles',
-                        'url' => route('settings-role.list'),
-                        'active' => in_array($route, ['settings-role.list', 'settings-role.create', 'settings-role.edit']),
-                        'enabled' => $user && $user->can('settings-role.manage'),
+                        'url' => route('role.list'),
+                        'active' => in_array($route, ['role.list', 'role.create', 'role.update']),
+                        'enabled' => $user && $user->can('role.manage'),
                     ],
                     [
                         'label' => 'Users',
-                        'url' => route('settings-user.list'),
-                        'active' => in_array($route, ['settings-user.list', 'settings-user.create', 'settings-user.edit']),
-                        'enabled' => $user && $user->can('settings-user.manage'),
+                        'url' => route('user.list'),
+                        'active' => in_array($route, ['user.list', 'user.create', 'user.update']),
+                        'enabled' => $user && $user->can('user.manage'),
                     ],
                     [
                         'label' => 'Files',
-                        'url' => route('settings-file.list'),
-                        'active' => $route === 'settings-file.list',
+                        'url' => route('file.list'),
+                        'active' => $route === 'file.list',
                     ],
                 ],
             ],
