@@ -70,7 +70,7 @@ class InstallCommand extends Command
                 '@inertiajs/inertia' => '^0.10.0',
                 '@inertiajs/inertia-vue' => '^0.7.2',
                 '@inertiajs/progress' => '^0.2.6',
-                // '@jiannius/ui' => '^1.0.0',
+                '@jiannius/ui' => '^1.0.0',
                 '@tailwindcss/forms' => '^0.2.1',
                 '@tailwindcss/typography' => '^0.3.0',
                 'dayjs' => '^1.10.6',
